@@ -1,0 +1,557 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXContainerItemProxy section */
+		4891AA8D2DC7059000FA43E7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4891AA742DC7058F00FA43E7 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4891AA7B2DC7058F00FA43E7;
+			remoteInfo = "terrible-two";
+		};
+		4891AA972DC7059000FA43E7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4891AA742DC7058F00FA43E7 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4891AA7B2DC7058F00FA43E7;
+			remoteInfo = "terrible-two";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		4891AA7C2DC7058F00FA43E7 /* terrible-two.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "terrible-two.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		4891AA8C2DC7059000FA43E7 /* terrible-twoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "terrible-twoTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		4891AA962DC7059000FA43E7 /* terrible-twoUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "terrible-twoUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		4891AA7E2DC7058F00FA43E7 /* terrible-two */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = "terrible-two";
+			sourceTree = "<group>";
+		};
+		4891AA8F2DC7059000FA43E7 /* terrible-twoTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = "terrible-twoTests";
+			sourceTree = "<group>";
+		};
+		4891AA992DC7059000FA43E7 /* terrible-twoUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = "terrible-twoUITests";
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		4891AA792DC7058F00FA43E7 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4891AA892DC7059000FA43E7 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4891AA932DC7059000FA43E7 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		4891AA732DC7058F00FA43E7 = {
+			isa = PBXGroup;
+			children = (
+				4891AA7E2DC7058F00FA43E7 /* terrible-two */,
+				4891AA8F2DC7059000FA43E7 /* terrible-twoTests */,
+				4891AA992DC7059000FA43E7 /* terrible-twoUITests */,
+				4891AA7D2DC7058F00FA43E7 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		4891AA7D2DC7058F00FA43E7 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				4891AA7C2DC7058F00FA43E7 /* terrible-two.app */,
+				4891AA8C2DC7059000FA43E7 /* terrible-twoTests.xctest */,
+				4891AA962DC7059000FA43E7 /* terrible-twoUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		4891AA7B2DC7058F00FA43E7 /* terrible-two */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4891AAA02DC7059000FA43E7 /* Build configuration list for PBXNativeTarget "terrible-two" */;
+			buildPhases = (
+				4891AA782DC7058F00FA43E7 /* Sources */,
+				4891AA792DC7058F00FA43E7 /* Frameworks */,
+				4891AA7A2DC7058F00FA43E7 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				4891AA7E2DC7058F00FA43E7 /* terrible-two */,
+			);
+			name = "terrible-two";
+			packageProductDependencies = (
+			);
+			productName = "terrible-two";
+			productReference = 4891AA7C2DC7058F00FA43E7 /* terrible-two.app */;
+			productType = "com.apple.product-type.application";
+		};
+		4891AA8B2DC7059000FA43E7 /* terrible-twoTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4891AAA32DC7059000FA43E7 /* Build configuration list for PBXNativeTarget "terrible-twoTests" */;
+			buildPhases = (
+				4891AA882DC7059000FA43E7 /* Sources */,
+				4891AA892DC7059000FA43E7 /* Frameworks */,
+				4891AA8A2DC7059000FA43E7 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				4891AA8E2DC7059000FA43E7 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				4891AA8F2DC7059000FA43E7 /* terrible-twoTests */,
+			);
+			name = "terrible-twoTests";
+			packageProductDependencies = (
+			);
+			productName = "terrible-twoTests";
+			productReference = 4891AA8C2DC7059000FA43E7 /* terrible-twoTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		4891AA952DC7059000FA43E7 /* terrible-twoUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4891AAA62DC7059000FA43E7 /* Build configuration list for PBXNativeTarget "terrible-twoUITests" */;
+			buildPhases = (
+				4891AA922DC7059000FA43E7 /* Sources */,
+				4891AA932DC7059000FA43E7 /* Frameworks */,
+				4891AA942DC7059000FA43E7 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				4891AA982DC7059000FA43E7 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				4891AA992DC7059000FA43E7 /* terrible-twoUITests */,
+			);
+			name = "terrible-twoUITests";
+			packageProductDependencies = (
+			);
+			productName = "terrible-twoUITests";
+			productReference = 4891AA962DC7059000FA43E7 /* terrible-twoUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		4891AA742DC7058F00FA43E7 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1620;
+				LastUpgradeCheck = 1620;
+				TargetAttributes = {
+					4891AA7B2DC7058F00FA43E7 = {
+						CreatedOnToolsVersion = 16.2;
+					};
+					4891AA8B2DC7059000FA43E7 = {
+						CreatedOnToolsVersion = 16.2;
+						TestTargetID = 4891AA7B2DC7058F00FA43E7;
+					};
+					4891AA952DC7059000FA43E7 = {
+						CreatedOnToolsVersion = 16.2;
+						TestTargetID = 4891AA7B2DC7058F00FA43E7;
+					};
+				};
+			};
+			buildConfigurationList = 4891AA772DC7058F00FA43E7 /* Build configuration list for PBXProject "terrible-two" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 4891AA732DC7058F00FA43E7;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 4891AA7D2DC7058F00FA43E7 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				4891AA7B2DC7058F00FA43E7 /* terrible-two */,
+				4891AA8B2DC7059000FA43E7 /* terrible-twoTests */,
+				4891AA952DC7059000FA43E7 /* terrible-twoUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		4891AA7A2DC7058F00FA43E7 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4891AA8A2DC7059000FA43E7 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4891AA942DC7059000FA43E7 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		4891AA782DC7058F00FA43E7 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4891AA882DC7059000FA43E7 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4891AA922DC7059000FA43E7 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		4891AA8E2DC7059000FA43E7 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4891AA7B2DC7058F00FA43E7 /* terrible-two */;
+			targetProxy = 4891AA8D2DC7059000FA43E7 /* PBXContainerItemProxy */;
+		};
+		4891AA982DC7059000FA43E7 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4891AA7B2DC7058F00FA43E7 /* terrible-two */;
+			targetProxy = 4891AA972DC7059000FA43E7 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		4891AA9E2DC7059000FA43E7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		4891AA9F2DC7059000FA43E7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		4891AAA12DC7059000FA43E7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"terrible-two/Preview Content\"";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "hoho.terrible-two";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		4891AAA22DC7059000FA43E7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"terrible-two/Preview Content\"";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "hoho.terrible-two";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		4891AAA42DC7059000FA43E7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "hoho.terrible-twoTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/terrible-two.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/terrible-two";
+			};
+			name = Debug;
+		};
+		4891AAA52DC7059000FA43E7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "hoho.terrible-twoTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/terrible-two.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/terrible-two";
+			};
+			name = Release;
+		};
+		4891AAA72DC7059000FA43E7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "hoho.terrible-twoUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = "terrible-two";
+			};
+			name = Debug;
+		};
+		4891AAA82DC7059000FA43E7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "hoho.terrible-twoUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = "terrible-two";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		4891AA772DC7058F00FA43E7 /* Build configuration list for PBXProject "terrible-two" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4891AA9E2DC7059000FA43E7 /* Debug */,
+				4891AA9F2DC7059000FA43E7 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4891AAA02DC7059000FA43E7 /* Build configuration list for PBXNativeTarget "terrible-two" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4891AAA12DC7059000FA43E7 /* Debug */,
+				4891AAA22DC7059000FA43E7 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4891AAA32DC7059000FA43E7 /* Build configuration list for PBXNativeTarget "terrible-twoTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4891AAA42DC7059000FA43E7 /* Debug */,
+				4891AAA52DC7059000FA43E7 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4891AAA62DC7059000FA43E7 /* Build configuration list for PBXNativeTarget "terrible-twoUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4891AAA72DC7059000FA43E7 /* Debug */,
+				4891AAA82DC7059000FA43E7 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 4891AA742DC7058F00FA43E7 /* Project object */;
+}
