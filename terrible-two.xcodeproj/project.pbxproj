@@ -28,9 +28,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		4891AA7C2DC7058F00FA43E7 /* terrible-two.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = "terrible-two.app"; path = "/Users/aditya/Life/Apple Developer Academy/Projek/terrible-two/build/Debug-iphoneos/terrible-two.app"; sourceTree = "<absolute>"; };
-		4891AA8C2DC7059000FA43E7 /* terrible-twoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = "terrible-twoTests.xctest"; path = "/Users/aditya/Life/Apple Developer Academy/Projek/terrible-two/build/Debug-iphoneos/terrible-two.app/PlugIns/terrible-twoTests.xctest"; sourceTree = "<absolute>"; };
-		4891AA962DC7059000FA43E7 /* terrible-twoUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = "terrible-twoUITests.xctest"; path = "/Users/aditya/Life/Apple Developer Academy/Projek/terrible-two/build/Debug-iphoneos/terrible-twoUITests-Runner.app/PlugIns/terrible-twoUITests.xctest"; sourceTree = "<absolute>"; };
+		486810CF2DC7235200A42857 /* terrible-two.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "terrible-two.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		486810D02DC7235200A42857 /* terrible-twoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "terrible-twoTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		486810D12DC7235200A42857 /* terrible-twoUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "terrible-twoUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4891AAA92DC705AD00FA43E7 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -84,6 +84,9 @@
 				4891AA8F2DC7059000FA43E7 /* terrible-twoTests */,
 				4891AA992DC7059000FA43E7 /* terrible-twoUITests */,
 				4891AAA92DC705AD00FA43E7 /* .gitignore */,
+				486810CF2DC7235200A42857 /* terrible-two.app */,
+				486810D02DC7235200A42857 /* terrible-twoTests.xctest */,
+				486810D12DC7235200A42857 /* terrible-twoUITests.xctest */,
 			);
 			sourceTree = "<group>";
 		};
@@ -109,7 +112,7 @@
 			packageProductDependencies = (
 			);
 			productName = "terrible-two";
-			productReference = 4891AA7C2DC7058F00FA43E7 /* terrible-two.app */;
+			productReference = 486810CF2DC7235200A42857 /* terrible-two.app */;
 			productType = "com.apple.product-type.application";
 		};
 		4891AA8B2DC7059000FA43E7 /* terrible-twoTests */ = {
@@ -132,7 +135,7 @@
 			packageProductDependencies = (
 			);
 			productName = "terrible-twoTests";
-			productReference = 4891AA8C2DC7059000FA43E7 /* terrible-twoTests.xctest */;
+			productReference = 486810D02DC7235200A42857 /* terrible-twoTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 		4891AA952DC7059000FA43E7 /* terrible-twoUITests */ = {
@@ -155,7 +158,7 @@
 			packageProductDependencies = (
 			);
 			productName = "terrible-twoUITests";
-			productReference = 4891AA962DC7059000FA43E7 /* terrible-twoUITests.xctest */;
+			productReference = 486810D12DC7235200A42857 /* terrible-twoUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
