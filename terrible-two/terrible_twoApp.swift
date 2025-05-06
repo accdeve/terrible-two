@@ -11,7 +11,7 @@ import SwiftUI
 struct terrible_twoApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            Level1View()
         }
     }
 }
