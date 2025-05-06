@@ -483,7 +483,7 @@ class Level1Stage1Scene: SKScene {
             DispatchQueue.main.asyncAfter(
                 deadline: .now() + self.transitionDelay
             ) {
-                let nextScene = Level1Stage1IntroScene(size: self.size)
+                let nextScene = Level1Stage2Scene(size: self.size)
                 let transition = SKTransition.fade(withDuration: 1.5)
                 self.view?.presentScene(nextScene, transition: transition)
             }
