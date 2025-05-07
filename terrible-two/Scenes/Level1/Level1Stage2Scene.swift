@@ -12,20 +12,62 @@ class Level1Stage2Scene: SKScene {
     private var bebek: SKSpriteNode!
     var box : SKSpriteNode!
     var pictureFrame: SKSpriteNode!
+    var pictureFrame2: SKSpriteNode!
     var background: SKSpriteNode!
+    var initialCameraPosition: CGPoint!
     var isBoxClicked : Bool = false
+    var isBabyMove : Int = 1
+    
+    let cameraNode = SKCameraNode()
     
     private var swipeRightRecognizer: UISwipeGestureRecognizer?
     private var swipeLeftRecognizer: UISwipeGestureRecognizer?
+    
+    override func update(_ currentTime: TimeInterval) {
+        if isBabyMove == 2{
+            let lerpFactor: CGFloat = 0.1
+            let dx = bayi.position.x - cameraNode.position.x
+            let dy = bayi.position.y - cameraNode.position.y
+            cameraNode.position.x += dx * lerpFactor
+            cameraNode.position.y += dy * lerpFactor
+            }
+    }
+    
+    func stopCamera() {
+        //cameraNode.removeAllActions()
+        let zoomOut = SKAction.scale(to: 1.0, duration: 2)
+        let moveBack = SKAction.move(to: initialCameraPosition, duration: 2)
+        let cameraGroup = SKAction.group([zoomOut, moveBack])
 
+        cameraNode.run(cameraGroup){
+            self.isBabyMove = 1
+            print(self.isBabyMove)
+        }
+    }
+    
+    func cameraSetup(){
+        cameraNode.position = CGPoint(x: size.width * 0.5, y: size.height * 0.5)
+        initialCameraPosition = cameraNode.position
+        self.camera = cameraNode
+        self.addChild(cameraNode)
+    }
+    
+    func moveCamera() {
+        cameraNode.removeAllActions()
+        let zoom = SKAction.scale(by: 0.8, duration: 2.0)
+        cameraNode.run(zoom)
+    }
+    
     override func didMove(to view: SKView) {
         size = view.bounds.size
         scaleMode = .aspectFill
+        cameraSetup()
         createBackground()
         createBaby()
         createBox()
         createBebek()
         createPictureFrame()
+        createPictureFrame2()
         addSwipeGestures()
     }
     
@@ -49,11 +91,20 @@ class Level1Stage2Scene: SKScene {
         
     func createPictureFrame(){
         pictureFrame = SKSpriteNode(imageNamed: "foto")
-        pictureFrame.position = CGPoint(x: size.width / 2, y: size.height * 0.75)
+        pictureFrame.position = CGPoint(x: size.width / 2 + 200, y: size.height * 0.75 - 100)
         pictureFrame.zPosition = 0
         pictureFrame.size = CGSize(width: 40, height: 40)
         pictureFrame.name = "foto"
         addChild(pictureFrame)
+    }
+    
+    func createPictureFrame2(){
+        pictureFrame2 = SKSpriteNode(imageNamed: "foto")
+        pictureFrame2.position = CGPoint(x: size.width / 2, y: size.height * 0.75 - 100)
+        pictureFrame2.zPosition = 0
+        pictureFrame2.size = CGSize(width: 40, height: 40)
+        pictureFrame2.name = "foto2"
+        addChild(pictureFrame2)
     }
     
     func createBox(){
@@ -77,19 +128,42 @@ class Level1Stage2Scene: SKScene {
         let location = touch.location(in: self)
         let nodesAtPoint = nodes(at: location)
         
+        
         for node in nodesAtPoint {
             if node.name?.contains("foto") == true{
-                if node.name == "foto" {
-                    let move = SKAction.move(to: CGPoint(x: pictureFrame.position.x, y: pictureFrame.position.y - 200), duration: 2)
-                    let walkForwardMoveAnimationGroup = SKAction.group([move, WalkingAnimationBaby.walkForwardAnimation()])
-                                       
-                    bayi.run(walkForwardMoveAnimationGroup, withKey: "walk")
+                if node.name == "foto" && isBabyMove != 2{
+                    isBabyMove = 2
+                    moveCamera()
+                    let move = SKAction.move(to: CGPoint(x: pictureFrame.position.x, y: pictureFrame.position.y - 100), duration: 2)
+
+                    bayi.run(WalkingAnimationBaby.walkForwardAnimation(), withKey: "walk")
                     bayi.run(move){
                        self.bayi.removeAction(forKey: "walk")
+                        
                     }
                     bayi.run(WalkingAnimationBaby.delayAnimation()){
                         self.bayi.run(WalkingAnimationBaby.gapaiAnimation()){
-                            self.bayi.run(WalkingAnimationBaby.ngambekAnimation())
+                            self.bayi.run(WalkingAnimationBaby.ngambekAnimation()){
+                                self.stopCamera()
+                            }
+                        }
+                    }
+                }
+                if node.name == "foto2" && isBabyMove != 2{
+                    isBabyMove = 2
+                    moveCamera()
+                    let move = SKAction.move(to: CGPoint(x: pictureFrame2.position.x, y: pictureFrame2.position.y - 100), duration: 2)
+
+                    bayi.run(WalkingAnimationBaby.walkForwardAnimation(), withKey: "walk")
+                    bayi.run(move){
+                       self.bayi.removeAction(forKey: "walk")
+                        
+                    }
+                    bayi.run(WalkingAnimationBaby.delayAnimation()){
+                        self.bayi.run(WalkingAnimationBaby.gapaiAnimation()){
+                            self.bayi.run(WalkingAnimationBaby.ngambekAnimation()){
+                                self.stopCamera()
+                            }
                         }
                     }
                 }
