@@ -45,7 +45,6 @@ class Level1Stage2Scene: SKScene {
         createBox()
         createBebek()
         createPictureFrame()
-        addSwipeGestures()
     }
     
     func createBaby(){
@@ -114,6 +113,8 @@ class Level1Stage2Scene: SKScene {
     private func handlePictureFrameTouch() {
         
         isBoxClicked = false
+        self.setSwipeGesture(enabled: false)
+
         box.color = isBoxClicked ? .red : .white
         
         let target = CGPoint(x: pictureFrame.position.x, y: pictureFrame.position.y - 200)
@@ -136,7 +137,10 @@ class Level1Stage2Scene: SKScene {
     }
     
     private func handleBebekTouch() {
+        
+        self.setSwipeGesture(enabled: false)
         isBoxClicked = false
+        
         box.color = isBoxClicked ? .red : .white
 
         let target = CGPoint(x: bebek.position.x - 50, y: bebek.position.y + 20)
@@ -166,7 +170,6 @@ class Level1Stage2Scene: SKScene {
     }
     
     private func positionBabyNextToBox() {
-        // Calculate the proper position for the baby at the left side of the box
         let targetX = box.position.x - (box.size.width / 2) - bayiBoxOffset + 30
         let targetPosition = CGPoint(x: targetX, y: 80)
         
@@ -180,9 +183,13 @@ class Level1Stage2Scene: SKScene {
             bayi.run(move) {
                 self.bayi.removeAction(forKey: "walk")
                 self.bayi.texture = SKTexture(imageNamed: "babyidle")
+                self.enableSwipeAfterBoxAnimation()
             }
+        } else {
+            self.enableSwipeAfterBoxAnimation()
         }
     }
+
     
     private func addSwipeGestures() {
         
@@ -277,7 +284,6 @@ class Level1Stage2Scene: SKScene {
             }
         }
     }
-
     
     private func updateBabyPosition() {
         // Place baby to the left of the box at a fixed distance
@@ -295,4 +301,31 @@ class Level1Stage2Scene: SKScene {
             bayi.texture = SKTexture(imageNamed: "babyidle")
         }
     }
+    
+    private func enableSwipeAfterBoxAnimation() {
+        // Hindari duplikat gesture
+        if let pan = panGestureRecognizer {
+            view?.removeGestureRecognizer(pan)
+        }
+        addSwipeGestures()
+    }
+    
+    private func setSwipeGesture(enabled: Bool) {
+        if enabled {
+            // Tambahkan jika belum ada
+            if panGestureRecognizer == nil {
+                let pan = UIPanGestureRecognizer(target: self, action: #selector(handlePanGesture))
+                panGestureRecognizer = pan
+                view?.addGestureRecognizer(pan)
+            }
+        } else {
+            // Hapus jika ada
+            if let pan = panGestureRecognizer {
+                view?.removeGestureRecognizer(pan)
+                panGestureRecognizer = nil
+            }
+        }
+    }
+
+
 }
