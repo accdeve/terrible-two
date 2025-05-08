@@ -101,14 +101,6 @@ class Level1Stage1Scene: SKScene {
         // Store initial position for later use
         doorInitialPosition = door.position
         doorMaxHeight = doorOpenHeight
-
-        // Add gentle pulsing effect to hint that the door can be interacted with
-//        let fadeOut = SKAction.fadeAlpha(to: 0.92, duration: 1.5)
-//        fadeOut.timingMode = .easeInEaseOut
-//        let fadeIn = SKAction.fadeAlpha(to: 1.0, duration: 1.5)
-//        fadeIn.timingMode = .easeInEaseOut
-//        let pulse = SKAction.sequence([fadeOut, fadeIn])
-        
         
         let scaleUp = SKAction.scale(by: 1.03, duration: 2.2)
         scaleUp.timingMode = .easeInEaseOut
@@ -117,13 +109,10 @@ class Level1Stage1Scene: SKScene {
         let breathe = SKAction.sequence([scaleUp, scaleDown])
         door.run(SKAction.repeatForever(breathe))
         
-//         door.run(SKAction.repeatForever(pulse))
-        
         addChild(door)
     }
 
     private func setupLightRays() {
-        // Create hidden light rays that will appear when door starts opening
         let rays = SKNode()
         rays.name = "light-rays"
         rays.position = CGPoint(x: size.width / 2, y: size.height / 2)
@@ -176,10 +165,6 @@ class Level1Stage1Scene: SKScene {
         if let rays = lightRays {
             rays.alpha = doorDragProgress * 0.8
         }
-
-        // Add gentle rotation based on drag position
-        //        let maxRotation: CGFloat = 0.05
-        //        door.zRotation = maxRotation * doorDragProgress
 
         // If door is over 90% open, trigger the completion
         if doorDragProgress >= 0.9 && !doorOpened {
@@ -488,82 +473,5 @@ class Level1Stage1Scene: SKScene {
                 self.view?.presentScene(nextScene, transition: transition)
             }
         }
-    }
-}
-
-// Placeholder for your next scene - replace with your actual next scene class
-class Level1Stage1IntroScene: SKScene {
-    override func didMove(to view: SKView) {
-        backgroundColor = SKColor(red: 0.1, green: 0.1, blue: 0.2, alpha: 1.0)
-
-        createStarryBackground()
-        createWorldSilhouette()
-
-        let freedomLabel = SKLabelNode(fontNamed: "AvenirNext-Bold")
-        freedomLabel.text = "Terrible Two"
-        freedomLabel.fontSize = 42
-        freedomLabel.fontColor = .white
-        freedomLabel.position = CGPoint(x: size.width / 2, y: size.height / 2)
-        freedomLabel.alpha = 0
-        addChild(freedomLabel)
-
-        let fadeIn = SKAction.fadeIn(withDuration: 1.0)
-        fadeIn.timingMode = .easeOut
-        let scaleUp = SKAction.scale(to: 1.2, duration: 0.8)
-        scaleUp.timingMode = .easeOut
-        let scaleDown = SKAction.scale(to: 1.0, duration: 0.4)
-        scaleDown.timingMode = .easeIn
-
-        let sequence = SKAction.sequence([
-            SKAction.wait(forDuration: 0.5),
-            SKAction.group([fadeIn, scaleUp]),
-            scaleDown,
-        ])
-
-        freedomLabel.run(sequence)
-    }
-
-    private func createStarryBackground() {
-        for _ in 0..<100 {
-            let star = SKShapeNode(circleOfRadius: CGFloat.random(in: 1...3))
-            star.fillColor = .white
-            star.strokeColor = .clear
-            star.position = CGPoint(
-                x: CGFloat.random(in: 0...size.width),
-                y: CGFloat.random(in: 0...size.height)
-            )
-            star.alpha = CGFloat.random(in: 0.3...1.0)
-            addChild(star)
-
-            let duration = TimeInterval.random(in: 1.0...3.0)
-            let fadeOut = SKAction.fadeAlpha(to: 0.3, duration: duration)
-            fadeOut.timingMode = .easeInEaseOut
-            let fadeIn = SKAction.fadeAlpha(to: 1.0, duration: duration)
-            fadeIn.timingMode = .easeInEaseOut
-            let twinkle = SKAction.sequence([fadeOut, fadeIn])
-            star.run(SKAction.repeatForever(twinkle))
-        }
-    }
-
-    private func createWorldSilhouette() {
-    
-        let silhouetteHeight: CGFloat = size.height * 0.3
-
-        let path = UIBezierPath()
-        path.move(to: CGPoint(x: 0, y: 0))
-
-        
-        let segments = 20
-        let segmentWidth = size.width / CGFloat(segments)
-
-        for i in 0...segments {
-            let x = CGFloat(i) * segmentWidth
-            let height = CGFloat.random(
-                in: silhouetteHeight / 2...silhouetteHeight)
-            path.addLine(to: CGPoint(x: x, y: height))
-        }
-
-
-        path.addLine(to: CGPoint(x: size.width, y: 0))
     }
 }
