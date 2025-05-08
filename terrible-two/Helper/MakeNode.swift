@@ -7,11 +7,25 @@
 
 import SpriteKit
 
-//func makeNode(imageName :String, name:String, positionX: Int, positionY: Int, width: Int, height: Int, zPosition: Int) {
-//    var nodeChild = SKSpriteNode(imageNamed: imageName)
-//    nodeChild.name = name
-//    nodeChild.position = CGPoint(x: width, y: height)
-//    nodeChild.size = CGSize(width: 50, height: 50)
-//    nodeChild.zPosition = 1
-//    addChild(nodeChild)
-//}
+func createNode(imageNamed: String? = nil,
+                color: SKColor = .clear,
+                size: CGSize,
+                position: CGPoint,
+                zPosition: CGFloat = 0,
+                name: String? = nil) -> SKSpriteNode {
+    
+    let node: SKSpriteNode
+    
+    if let imageName = imageNamed {
+        node = SKSpriteNode(imageNamed: imageName)
+    } else {
+        node = SKSpriteNode(color: color, size: size)
+    }
+    
+    node.size = size
+    node.position = position
+    node.zPosition = zPosition
+    node.name = name
+    
+    return node
+}

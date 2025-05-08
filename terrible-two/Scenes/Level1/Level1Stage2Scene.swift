@@ -4,19 +4,27 @@
 //
 //  Created by Samuel Andrey Aji Prasetya on 06/05/25.
 //
+
 import SpriteKit
 import UIKit
 
 class Level1Stage2Scene: SKScene {
-    private var bayi: SKSpriteNode!
-    private var bebek: SKSpriteNode!
+    var bayi: SKSpriteNode!
+    var bebek: SKSpriteNode!
     var box : SKSpriteNode!
     var pictureFrame: SKSpriteNode!
     var background: SKSpriteNode!
     var isBoxClicked : Bool = false
+    var door :SKSpriteNode!
+    
+    var isTeksDadIsComingActive = false
+    var teksDadIsComing : SKLabelNode!
     
     private var swipeRightRecognizer: UISwipeGestureRecognizer?
     private var swipeLeftRecognizer: UISwipeGestureRecognizer?
+    private var hasCameraSequenceRun = false
+    private var cameraNode: SKCameraNode?
+
 
     override func didMove(to view: SKView) {
         size = view.bounds.size
@@ -27,6 +35,20 @@ class Level1Stage2Scene: SKScene {
         createBebek()
         createPictureFrame()
         addSwipeGestures()
+        createCamera()
+        createDoor()
+        createTeksDadIsComing()
+        teksDadIsComingController()
+    }
+    
+    func createCamera(){
+        cameraNode = SKCameraNode()
+        self.camera = cameraNode
+        if let cameraNode = cameraNode {
+            addChild(cameraNode)
+        }
+        cameraNode?.setScale(1)
+        cameraNode?.position = CGPoint(x: size.width / 2, y: size.height / 2)
     }
     
     func createBaby(){
@@ -36,7 +58,7 @@ class Level1Stage2Scene: SKScene {
         bayi.name = "bayi"
         bayi.size = CGSize(width: 200, height: 200)
         addChild(bayi)
-        }
+    }
     
     func createBebek(){
         bebek = SKSpriteNode(imageNamed: "bebekGround")
@@ -71,6 +93,60 @@ class Level1Stage2Scene: SKScene {
         background.size = size
         addChild(background)
     }
+    
+    func createDoor() {
+        door = SKSpriteNode(color: .black, size: CGSize(width: 80, height: 60))
+        door.position = CGPoint(x: size.width / 1.05, y: size.height / 2)
+        door.zPosition = 0
+        door.name = "door"
+        addChild(door)
+    }
+    
+    func createTeksDadIsComing() {
+        teksDadIsComing = SKLabelNode(fontNamed: "Chalkduster")
+        teksDadIsComing.text = "Dad is coming"
+        teksDadIsComing.fontColor = .black
+        teksDadIsComing.fontSize = 100
+        teksDadIsComing.position = CGPoint(x: size.width / 2, y: size.height / 2)
+        teksDadIsComing.alpha = 0.0
+        teksDadIsComing.zPosition = 100
+        addChild(teksDadIsComing)
+    }
+    
+    func teksDadIsComingController() {
+        let initialWait = SKAction.wait(forDuration: 5.0)
+        let activateFlag = SKAction.run { [weak self] in
+            self?.isTeksDadIsComingActive = true
+            self?.showBlinkingText()
+        }
+        
+        let waitBetweenRepeats = SKAction.wait(forDuration: 10.0)
+        let sequence = SKAction.sequence([initialWait, activateFlag, waitBetweenRepeats])
+        let repeatAction = SKAction.repeatForever(sequence)
+        
+        run(repeatAction, withKey: "teksDadIsComingController")
+    }
+    
+    func showBlinkingText() {
+        teksDadIsComing.alpha = 0.0
+
+        let blinkOn = SKAction.fadeAlpha(to: 1.0, duration: 0.5)
+        let blinkOff = SKAction.fadeAlpha(to: 0.0, duration: 0.5)
+        let blink = SKAction.sequence([blinkOff, blinkOn])
+        let blinkRepeat = SKAction.repeat(blink, count: 5)
+
+        let deactivateFlag = SKAction.run { [weak self] in
+            self?.isTeksDadIsComingActive = false
+        }
+
+        let hideText = SKAction.run { [weak self] in
+            self?.teksDadIsComing.alpha = 0.0
+        }
+
+        let sequence = SKAction.sequence([blinkRepeat, deactivateFlag, hideText])
+        teksDadIsComing.run(sequence)
+    }
+
 
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         guard let touch = touches.first else { return }
@@ -80,53 +156,107 @@ class Level1Stage2Scene: SKScene {
         for node in nodesAtPoint {
             if node.name?.contains("foto") == true{
                 if node.name == "foto" {
-                    let move = SKAction.move(to: CGPoint(x: pictureFrame.position.x, y: pictureFrame.position.y - 200), duration: 2)
-                    let walkForwardMoveAnimationGroup = SKAction.group([move, WalkingAnimationBaby.walkForwardAnimation()])
-                                       
-                    bayi.run(walkForwardMoveAnimationGroup, withKey: "walk")
-                    bayi.run(move){
-                       self.bayi.removeAction(forKey: "walk")
+                    if(isTeksDadIsComingActive){
+                        let nextScene = Level1Stage1Scene()
+                        nextScene.scaleMode = .aspectFill
+                        let transition = SKTransition.fade(withDuration: 1.0)
+                        self.view?.presentScene(nextScene, transition: transition)
                     }
-                    bayi.run(WalkingAnimationBaby.delayAnimation()){
-                        self.bayi.run(WalkingAnimationBaby.gapaiAnimation()){
-                            self.bayi.run(WalkingAnimationBaby.ngambekAnimation())
+                    else{
+                        let move = SKAction.move(to: CGPoint(x: pictureFrame.position.x, y: pictureFrame.position.y - 200), duration: 2)
+                        let walkForwardMoveAnimationGroup = SKAction.group([move, WalkingAnimationBaby.walkForwardAnimation()])
+                                           
+                        bayi.run(walkForwardMoveAnimationGroup, withKey: "walk")
+                        bayi.run(move){
+                           self.bayi.removeAction(forKey: "walk")
+                        }
+                        bayi.run(WalkingAnimationBaby.delayAnimation()){
+                            self.bayi.run(WalkingAnimationBaby.gapaiAnimation()){
+                                self.bayi.run(WalkingAnimationBaby.ngambekAnimation())
+                            }
                         }
                     }
+                    break
                 }
             }
             else if node.name?.contains("Ground") == true{
                 if node.name == "bebekGround" {
-                   let move = SKAction.move(to: CGPoint(x: bebek.position.x - 20, y: bebek.position.y), duration: 2)
-                   let walkForwardMoveAnimationGroup = SKAction.group([move, WalkingAnimationBaby.walkForwardAnimation()])
-                                      
-                   bayi.run(walkForwardMoveAnimationGroup, withKey: "walk")
-                   bayi.run(move){
-                      self.bayi.removeAction(forKey: "walk")
-                   }
-                   break
-               } else if node.name == "boxGround" {
-                   isBoxClicked.toggle()
-                   box.color = isBoxClicked ? .red : .white
-                   box.colorBlendFactor = isBoxClicked ? 0.5 : 0.0
+                    if(isTeksDadIsComingActive){
+                        let nextScene = Level1Stage1Scene()
+                        nextScene.scaleMode = .aspectFill
+                        let transition = SKTransition.fade(withDuration: 1.0)
+                        self.view?.presentScene(nextScene, transition: transition)
+                    }
+                    else{
+                        let move = SKAction.move(to: CGPoint(x: bebek.position.x - 20, y: bebek.position.y), duration: 2)
+                        let walkForwardMoveAnimationGroup = SKAction.group([move, WalkingAnimationBaby.walkForwardAnimation()])
+                                           
+                        bayi.run(walkForwardMoveAnimationGroup, withKey: "walk")
+                        bayi.run(move){
+                           self.bayi.removeAction(forKey: "walk")
+                        }
+                        break
+                    }
                    
-                   if isBoxClicked {
-                       let boxLeftEdge = box.position.x - (box.size.width / 2) - (bayi.size.width / 2) - 10
-                       let targetPosition = CGPoint(x: boxLeftEdge, y: box.position.y)
-
-                       let distance = hypot(bayi.position.x - targetPosition.x, bayi.position.y - targetPosition.y)
-                       if distance > 20 {
-                           let move = SKAction.move(to: CGPoint(x: box.position.x - 20, y: box.position.y), duration: 2)
-                           _ = SKAction.group([move, WalkingAnimationBaby.walkForwardAnimation()])
-                                
-                           _ = SKAction.run {
-                               self.bayi.texture = SKTexture(imageNamed: "bayiidle")
+               } else if node.name == "boxGround" {
+                   if(isTeksDadIsComingActive){
+                       let nextScene = Level1Stage1Scene()
+                       nextScene.scaleMode = .aspectFill
+                       let transition = SKTransition.fade(withDuration: 1.0)
+                       self.view?.presentScene(nextScene, transition: transition)
+                   } else{
+                       isBoxClicked.toggle()
+                       box.color = isBoxClicked ? .red : .white
+                       box.colorBlendFactor = isBoxClicked ? 0.5 : 0.0
+                       
+                       if isBoxClicked {
+                           if !hasCameraSequenceRun {
+                               hasCameraSequenceRun = true
+                               if let cameraNode = cameraNode {
+                                   let zoomIn = SKAction.scale(to: 0.5, duration: 1.0)
+                                   let moveToBayi = SKAction.move(to: bayi.position, duration: 1.0)
+                                   let bayiFollowGroup = SKAction.group([zoomIn, moveToBayi])
+                                   
+                                   let wait1 = SKAction.wait(forDuration: 1.0)
+                                   let moveToDoor = SKAction.move(to: CGPoint(x: size.width / 1.35, y: size.height / 2), duration: 1.0)
+                                   let wait2 = SKAction.wait(forDuration: 1.0)
+                                   let zoomOut = SKAction.scale(to: 1.0, duration: 1.0)
+                                   let moveToCenter = SKAction.move(to: CGPoint(x: size.width/2, y: size.height/2), duration: 1.0)
+                                   let zoomOutGroup = SKAction.group([zoomOut, moveToCenter])
+                                   
+                                   let sequence = SKAction.sequence([
+                                       bayiFollowGroup,
+                                       wait1,
+                                       moveToDoor,
+                                       wait2,
+                                       zoomOutGroup
+                                   ])
+                                   
+                                   cameraNode.run(sequence)
+                               }
                            }
+
+                           let move = SKAction.move(to: CGPoint(x: box.position.x - 20, y: box.position.y), duration: 2)
+                           let walkForwardMoveAnimationGroup = SKAction.group([move, WalkingAnimationBaby.walkForwardAnimation()])
+                           
+                           bayi.run(walkForwardMoveAnimationGroup, withKey: "walk")
                            bayi.run(move){
-                              self.bayi.removeAction(forKey: "walk")
+                               self.bayi.removeAction(forKey: "walk")
                            }
                        }
+
+
+                       else {
+                           if let cameraNode = cameraNode {
+                               let zoomOut = SKAction.scale(to: 1.0, duration: 1.0)
+                               let moveToCenter = SKAction.move(to: CGPoint(x: size.width/2, y: size.height/2), duration: 1.0)
+                               let group = SKAction.group([zoomOut, moveToCenter])
+                               cameraNode.run(group)
+                           }
+                           }
+                       break
                    }
-                   break
+                   
                }
             }
              
