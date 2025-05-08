@@ -313,6 +313,11 @@ class Level1Stage2Scene: SKScene {
 
                 // Animasi lompat
                 self.jumpAnimation()
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    self.transitionToNextScene()
+                }
+                
             } else {
                 print("Box belum di pintu, bayi ngambek.")
                 // Animasi gapai
@@ -463,7 +468,7 @@ class Level1Stage2Scene: SKScene {
 
     private func positionBabyNextToBox() {
         let targetX = box.position.x - (box.size.width / 2) - bayiBoxOffset + 30
-        let targetPosition = CGPoint(x: targetX, y: 100)
+        let targetPosition = CGPoint(x: targetX, y: 90)
 
         let distance = hypot(
             bayi.position.x - targetPosition.x,
@@ -648,4 +653,41 @@ class Level1Stage2Scene: SKScene {
         }
     }
 
+    
+    private func transitionToNextScene() {
+        let blackOverlay = SKSpriteNode(color: .black, size: size)
+        blackOverlay.position = CGPoint(x: size.width / 2, y: size.height / 2)
+        blackOverlay.zPosition = 110
+        blackOverlay.alpha = 0
+        addChild(blackOverlay)
+
+        let fadeIn = SKAction.fadeIn(withDuration: 2.0)
+        fadeIn.timingMode = .easeIn
+        blackOverlay.run(fadeIn) { [weak self] in
+            guard let self = self else { return }
+
+            let transitionLabel = SKLabelNode(fontNamed: "AvenirNext-DemiBold")
+            transitionLabel.text = "Ceritanya udah berhasil buka pintu ya ges, ngantuk..."
+            transitionLabel.fontSize = 25
+            transitionLabel.fontColor = .white
+            transitionLabel.position = CGPoint(
+                x: self.size.width / 2 + 100, y: self.size.height / 2)
+            transitionLabel.zPosition = 111
+            transitionLabel.alpha = 0
+            self.addChild(transitionLabel)
+
+        
+            let fadeInText = SKAction.fadeIn(withDuration: 1.0)
+            transitionLabel.run(fadeInText)
+
+            DispatchQueue.main.asyncAfter(
+                deadline: .now() + TimeInterval(3.0)
+            ) {
+                let nextScene = Level1Stage2Scene(size: self.size)
+                let transition = SKTransition.fade(withDuration: 1.5)
+                self.view?.presentScene(nextScene, transition: transition)
+            }
+        }
+    }
+    
 }
