@@ -353,7 +353,7 @@ class Level1Stage2Scene: SKScene {
                     let zoomIn = SKAction.scale(to: 0.5, duration: 1.0)
                     let moveToBayi = SKAction.move(
                         to: CGPoint(
-                            x: box.position.x, y: box.position.y + 80),
+                            x: box.position.x, y: box.position.y + 100),
                         duration: 1.0)
                     let bayiFollowGroup = SKAction.group([zoomIn, moveToBayi])
 
