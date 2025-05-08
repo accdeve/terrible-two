@@ -12,20 +12,124 @@ class Level1Stage2Scene: SKScene {
     private var bebek: SKSpriteNode!
     var box : SKSpriteNode!
     var pictureFrame: SKSpriteNode!
+    var pictureFrame2: SKSpriteNode!
     var background: SKSpriteNode!
+    var initialCameraPosition: CGPoint!
     var isBoxClicked : Bool = false
+    var isBabyMove : Bool = false
+    //var newCameraPosition: CGPoint!
+    var twoSideCameraCondition: Int = 1
+    
+    var invisibleWall: SKSpriteNode!
+    
+    
+    let cameraNode = SKCameraNode()
     
     private var swipeRightRecognizer: UISwipeGestureRecognizer?
     private var swipeLeftRecognizer: UISwipeGestureRecognizer?
-
+    
+    override func update(_ currentTime: TimeInterval) {
+        //cameraMovementUpdate()
+        
+    }
+    
+    func cameraMovementUpdateForBox(){
+        
+    }
+    
+    // kalo camnya ngikut bayi
+//    func cameraMovementUpdate() {
+//        let screenHalfWidth = scene!.size.width / 3
+//        
+//        let backgroundRightEdge = background.size.width
+//        
+//        let backgroundLeftEdge = background.position.x - background.size.width / 2
+//        
+//        let leftMax = backgroundLeftEdge + screenHalfWidth
+//        
+//        let rightMax = backgroundRightEdge - screenHalfWidth
+//        print(rightMax)
+//
+//        if isBabyMove {
+//            let lerpFactor: CGFloat = 0.1
+//            let dx = bayi.position.x - cameraNode.position.x
+//            let dy = bayi.position.y - cameraNode.position.y + 50
+//            
+//            // Predict next x position
+//            var nextCameraX = cameraNode.position.x + dx * lerpFactor
+//            //print(nextCameraX)
+//            
+//            //nextCameraX = min(max(nextCameraX, leftMax), rightMax)
+//            if nextCameraX <= rightMax{
+//                cameraNode.position.x = nextCameraX
+//            }
+//            else {
+//                cameraNode.position.x = rightMax
+//            }
+//
+//            cameraNode.position.x = nextCameraX
+//                    cameraNode.position.y += dy * lerpFactor
+//        }
+//    }
+    
+    func cameraSetup(){
+        cameraNode.position = CGPoint(x: size.width * 0.5, y: size.height * 0.5)
+        initialCameraPosition = cameraNode.position
+        self.camera = cameraNode
+        self.addChild(cameraNode)
+    }
+    
+    // kalo zoom doang
+//    func zoomCamera() {
+//        if !isBabyMove{
+//            let zoom = SKAction.scale(by: 0.7, duration: 2.0)
+//            cameraNode.run(zoom)
+//        }
+//    }
+    
+    func zoomCamera() {
+        let zoom = SKAction.scale(by: 0.8, duration: 2.0)
+        let reSize = CGPoint(x: cameraNode.position.x + 50, y: cameraNode.position.y - 20)
+        
+        let cameraGroup = SKAction.group([zoom, SKAction.move(to: reSize, duration: 2.0)])
+        if !isBabyMove{
+            cameraNode.run(cameraGroup)
+        }
+    }
+    
+    func twoSideCamera() {
+        let backgroundSizeWidth = background.size.width
+        let backgroundSizeDevidedByFour = (background.size.width / 4)
+        let leftSideMiddle = backgroundSizeDevidedByFour * (1 / 0.75)
+        print(leftSideMiddle)
+        let rightSideMiddle = backgroundSizeWidth - leftSideMiddle * (1 / 0.75)
+        let hight = (background.size.height / 3)
+        
+        
+        let zoomedInCameraPosition = CGPoint(x: leftSideMiddle, y: hight)
+        let zoomedInScaledCamera = SKAction.scale(by: 0.75, duration: 2)
+        
+        if twoSideCameraCondition == 1 && !isBabyMove{
+            cameraNode.run(zoomedInScaledCamera){
+                self.cameraNode.run(SKAction.move(to: zoomedInCameraPosition, duration: 2))
+            }
+        }
+        else{
+        
+        }
+            
+    }
+    
     override func didMove(to view: SKView) {
         size = view.bounds.size
         scaleMode = .aspectFill
+        cameraSetup()
         createBackground()
         createBaby()
         createBox()
         createBebek()
         createPictureFrame()
+        createPictureFrame2()
         addSwipeGestures()
     }
     
@@ -49,17 +153,26 @@ class Level1Stage2Scene: SKScene {
         
     func createPictureFrame(){
         pictureFrame = SKSpriteNode(imageNamed: "foto")
-        pictureFrame.position = CGPoint(x: size.width / 2, y: size.height * 0.75)
+        pictureFrame.position = CGPoint(x: size.width / 2 + 200, y: size.height * 0.75 - 100)
         pictureFrame.zPosition = 0
         pictureFrame.size = CGSize(width: 40, height: 40)
         pictureFrame.name = "foto"
         addChild(pictureFrame)
     }
     
+    func createPictureFrame2(){
+        pictureFrame2 = SKSpriteNode(imageNamed: "foto")
+        pictureFrame2.position = CGPoint(x: size.width / 2 - 200, y: size.height * 0.75 - 100)
+        pictureFrame2.zPosition = 0
+        pictureFrame2.size = CGSize(width: 40, height: 40)
+        pictureFrame2.name = "foto2"
+        addChild(pictureFrame2)
+    }
+    
     func createBox(){
         box = SKSpriteNode(imageNamed: "boxGround")
         box.size = CGSize(width: 50, height: 60)
-        box.position = CGPoint(x: size.width * 0.15, y: size.height * 0.11)
+        box.position = CGPoint(x: size.width * 0.15 + 200, y: size.height * 0.11 + 50)
         box.name = "boxGround"
         addChild(box)
     }
@@ -71,21 +184,50 @@ class Level1Stage2Scene: SKScene {
         background.size = size
         addChild(background)
     }
+    
+//    func createInvisibleWall(){
+//        invisibleWall = SKSpriteNode(imageNamed: "boxGround")
+//        invisibleWall.position = CGPoint(x: background.size.width / 4 + 100, y: background.size.height / 2)
+//        invisibleWall.zPosition = 50
+//        invisibleWall.size = size
+//        addChild(invisibleWall)
+//    }
 
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         guard let touch = touches.first else { return }
         let location = touch.location(in: self)
         let nodesAtPoint = nodes(at: location)
         
+        
         for node in nodesAtPoint {
+            //zoomCamera()
+            twoSideCamera()
             if node.name?.contains("foto") == true{
-                if node.name == "foto" {
-                    let move = SKAction.move(to: CGPoint(x: pictureFrame.position.x, y: pictureFrame.position.y - 200), duration: 2)
-                    let walkForwardMoveAnimationGroup = SKAction.group([move, WalkingAnimationBaby.walkForwardAnimation()])
-                                       
-                    bayi.run(walkForwardMoveAnimationGroup, withKey: "walk")
+                if node.name == "foto"{
+                    let move = SKAction.move(to: CGPoint(x: pictureFrame.position.x, y: pictureFrame.position.y - 100), duration: 2)
+
+                    
+                    bayi.run(WalkingAnimationBaby.walkForwardAnimation(), withKey: "walk")
+                    isBabyMove = true
                     bayi.run(move){
                        self.bayi.removeAction(forKey: "walk")
+                        
+                    }
+                    bayi.run(WalkingAnimationBaby.delayAnimation()){
+                        self.bayi.run(WalkingAnimationBaby.gapaiAnimation()){
+                            self.bayi.run(WalkingAnimationBaby.ngambekAnimation())
+                        }
+                    }
+                }
+                if node.name == "foto2"{
+                    isBabyMove = true
+                    let move = SKAction.move(to: CGPoint(x: pictureFrame2.position.x + 100, y: pictureFrame2.position.y - 100), duration: 2)
+
+                    bayi.run(WalkingAnimationBaby.walkForwardAnimation(), withKey: "walk")
+                    isBabyMove = true
+                    bayi.run(move){
+                       self.bayi.removeAction(forKey: "walk")
+                        
                     }
                     bayi.run(WalkingAnimationBaby.delayAnimation()){
                         self.bayi.run(WalkingAnimationBaby.gapaiAnimation()){
@@ -115,6 +257,8 @@ class Level1Stage2Scene: SKScene {
 
                        let distance = hypot(bayi.position.x - targetPosition.x, bayi.position.y - targetPosition.y)
                        if distance > 20 {
+                           //zoomCamera(CGPoint: CGPoint(x: box.position.x + 300, y: box.position.y + 100))
+                           isBabyMove = true
                            let move = SKAction.move(to: CGPoint(x: box.position.x - 20, y: box.position.y), duration: 2)
                            _ = SKAction.group([move, WalkingAnimationBaby.walkForwardAnimation()])
                                 
