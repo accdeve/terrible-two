@@ -214,7 +214,7 @@ class Level1Stage2Scene: SKScene {
                                hasCameraSequenceRun = true
                                if let cameraNode = cameraNode {
                                    let zoomIn = SKAction.scale(to: 0.5, duration: 1.0)
-                                   let moveToBayi = SKAction.move(to: bayi.position, duration: 1.0)
+                                   let moveToBayi = SKAction.move(to: CGPoint(x: size.width * 0.25, y: size.height * 0.25), duration: 1.0)
                                    let bayiFollowGroup = SKAction.group([zoomIn, moveToBayi])
                                    
                                    let wait1 = SKAction.wait(forDuration: 1.0)
