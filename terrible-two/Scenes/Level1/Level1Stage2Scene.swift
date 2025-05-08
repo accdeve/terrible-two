@@ -60,7 +60,7 @@ class Level1Stage2Scene: SKScene {
         let textureSize = bayi.texture?.size() ?? CGSize(width: 1, height: 1)
         let scaleFactor = targetWidth / textureSize.width
 
-        bayi.setScale(scaleFactor)  // Skala proporsional, tidak stretch
+        bayi.setScale(scaleFactor)
 
         bayi.position = CGPoint(x: size.width * 0.25, y: size.height * 0.20)
         bayi.zPosition = 100
@@ -89,8 +89,14 @@ class Level1Stage2Scene: SKScene {
 
     func createBox() {
         box = SKSpriteNode(imageNamed: "boxGround")
-        box.size = CGSize(width: 50, height: 60)
-        box.position = CGPoint(x: size.width * 0.40, y: size.height * 0.15)
+        let targetWidth: CGFloat = 50.0
+
+        let textureSize = box.texture?.size() ?? CGSize(width: 1, height: 1)
+        let scaleFactor = targetWidth / textureSize.width
+
+        box.setScale(scaleFactor)
+        
+        box.position = CGPoint(x: size.width * 0.40, y: size.height * 0.12)
         box.name = "boxGround"
         box.zPosition = 2
         addChild(box)
@@ -138,37 +144,51 @@ class Level1Stage2Scene: SKScene {
     }
 
     private func handleDoorTouch() {
-
         isBoxClicked = false
         box.color = .white
         self.setSwipeGesture(enabled: false)
 
-        let target = CGPoint(x: door.position.x - 40, y: door.position.y - 90)
-        let distance = hypot(
-            bayi.position.x - target.x, bayi.position.y - target.y)
-
+        let target = CGPoint(x: door.position.x - 20, y: door.position.y - 90)
+        let distance = hypot(bayi.position.x - target.x, bayi.position.y - target.y)
+        let kecepatanBayi: CGFloat = 130.0
         let duration = TimeInterval(distance / kecepatanBayi)
 
         let move = SKAction.move(to: target, duration: duration)
-        let walk = SKAction.group([
-            move, WalkingAnimationBaby.walkForwardAnimation(),
-        ])
+        let walk = SKAction.group([move, WalkingAnimationBaby.walkForwardAnimation()])
 
         bayi.run(walk, withKey: "walk")
         bayi.run(move) {
             self.bayi.removeAction(forKey: "walk")
-
+            
             if self.isBoxAtDoor {
                 print("Box sudah di pintu, bayi bisa naik dan buka pintu.")
-                // jalankan animasi naik box lalu buka pintu
+                
+                // Animasi lompat
+                self.jumpAnimation()
             } else {
                 print("Box belum di pintu, bayi ngambek.")
-                self.bayi.run(WalkingAnimationBaby.gapaiAnimation()) {
-                    self.bayi.run(WalkingAnimationBaby.ngambekAnimation())
-                }
+                // Animasi gapai
+                self.jumpAnimation()
             }
         }
     }
+
+    private func jumpAnimation() {
+        let jumpFrames = [
+            SKTexture(imageNamed: "baby_jumping1"),
+            SKTexture(imageNamed: "baby_jumping2")
+        ]
+        
+        let jumpAction = SKAction.animate(with: jumpFrames, timePerFrame: 0.3)
+        let jumpRepeat = SKAction.repeat(jumpAction, count: 4)
+        
+        let jumpGroup = SKAction.group([jumpRepeat])
+        
+        bayi.run(jumpGroup) {
+            self.bayi.texture = SKTexture(imageNamed: "baby_sit")
+        }
+    }
+
 
     private func handlePictureFrameTouch() {
 
@@ -197,11 +217,7 @@ class Level1Stage2Scene: SKScene {
         bayi.run(walkAnimationGroup, withKey: "walk")
         bayi.run(move) {
             self.bayi.removeAction(forKey: "walk")
-        }
-        bayi.run(WalkingAnimationBaby.delayAnimation()) {
-            self.bayi.run(WalkingAnimationBaby.gapaiAnimation()) {
-                self.bayi.run(WalkingAnimationBaby.ngambekAnimation())
-            }
+            self.jumpAnimation()
         }
     }
 
@@ -377,8 +393,8 @@ class Level1Stage2Scene: SKScene {
 
                 let walkAnimation =
                     self.currentMovementDirection == .right
-                    ? WalkingAnimationBaby.walkForwardAnimation()
-                    : WalkingAnimationBaby.walkBackwardAnimation()
+                    ? WalkingAnimationBaby.walkLowRight()
+                    : WalkingAnimationBaby.walkLowRightBackward()
 
                 self.bayi.run(SKAction.repeatForever(walkAnimation))
             }
