@@ -24,10 +24,14 @@ class Level1Stage2Scene: SKScene {
     private var isWalkingAnimationPlaying = false
     private var isBoxAtDoor: Bool = false
 
+    private var hasCameraSequenceRun = false
+    private var cameraNode: SKCameraNode?
+
+    var isTeksDadIsComingActive = false
+    var teksDadIsComing: SKLabelNode!
+
     private var lastLeftMoveTime: Date?
-
     private let bayiBoxOffset: CGFloat = 60.0
-
     private let kecepatanBayi: CGFloat = 100.0
 
     private enum MovementDirection {
@@ -50,6 +54,9 @@ class Level1Stage2Scene: SKScene {
         createBebek()
         createPictureFrame()
         createDoor()
+        createCamera()
+        createTeksDadIsComing()
+        teksDadIsComingController()
     }
 
     func createBaby() {
@@ -77,6 +84,16 @@ class Level1Stage2Scene: SKScene {
         addChild(bebek)
     }
 
+    func createCamera() {
+        cameraNode = SKCameraNode()
+        self.camera = cameraNode
+        if let cameraNode = cameraNode {
+            addChild(cameraNode)
+        }
+        cameraNode?.setScale(1)
+        cameraNode?.position = CGPoint(x: size.width / 2, y: size.height / 2)
+    }
+
     func createPictureFrame() {
         pictureFrame = SKSpriteNode(imageNamed: "foto")
         pictureFrame.position = CGPoint(
@@ -95,7 +112,7 @@ class Level1Stage2Scene: SKScene {
         let scaleFactor = targetWidth / textureSize.width
 
         box.setScale(scaleFactor)
-        
+
         box.position = CGPoint(x: size.width * 0.40, y: size.height * 0.12)
         box.name = "boxGround"
         box.zPosition = 2
@@ -121,6 +138,63 @@ class Level1Stage2Scene: SKScene {
         addChild(background)
     }
 
+    func createTeksDadIsComing() {
+        teksDadIsComing = SKLabelNode(fontNamed: "Chalkduster")
+        teksDadIsComing.text = "Dad is coming"
+        teksDadIsComing.fontColor = .black
+        teksDadIsComing.fontSize = 100
+        teksDadIsComing.position = CGPoint(
+            x: size.width / 2, y: size.height / 2)
+        teksDadIsComing.alpha = 0.0
+        teksDadIsComing.zPosition = 100
+        addChild(teksDadIsComing)
+    }
+
+    func showBlinkingText() {
+        teksDadIsComing.alpha = 0.0
+
+        let blinkOn = SKAction.fadeAlpha(to: 1.0, duration: 0.5)
+        let blinkOff = SKAction.fadeAlpha(to: 0.0, duration: 0.5)
+        let blink = SKAction.sequence([blinkOff, blinkOn])
+        let blinkRepeat = SKAction.repeat(blink, count: 5)
+
+        let deactivateFlag = SKAction.run { [weak self] in
+            self?.isTeksDadIsComingActive = false
+        }
+
+        let hideText = SKAction.run { [weak self] in
+            self?.teksDadIsComing.alpha = 0.0
+        }
+
+        let sequence = SKAction.sequence([
+            blinkRepeat, deactivateFlag, hideText,
+        ])
+        teksDadIsComing.run(sequence)
+    }
+
+    func moveSceneIfFail() {
+        let nextScene = Level1Stage1Scene()
+        nextScene.scaleMode = .aspectFill
+        let transition = SKTransition.fade(withDuration: 1.0)
+        self.view?.presentScene(nextScene, transition: transition)
+    }
+
+    func teksDadIsComingController() {
+        let initialWait = SKAction.wait(forDuration: 5.0)
+        let activateFlag = SKAction.run { [weak self] in
+            self?.isTeksDadIsComingActive = true
+            self?.showBlinkingText()
+        }
+
+        let waitBetweenRepeats = SKAction.wait(forDuration: 10.0)
+        let sequence = SKAction.sequence([
+            initialWait, activateFlag, waitBetweenRepeats,
+        ])
+        let repeatAction = SKAction.repeatForever(sequence)
+
+        run(repeatAction, withKey: "teksDadIsComingController")
+    }
+
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         guard let touch = touches.first else { return }
         let location = touch.location(in: self)
@@ -128,17 +202,33 @@ class Level1Stage2Scene: SKScene {
 
         for node in nodesAtPoint {
             if node.name == "foto" {
-                handlePictureFrameTouch()
-                break
+                if isTeksDadIsComingActive {
+                    moveSceneIfFail()
+                } else {
+                    handlePictureFrameTouch()
+                    break
+                }
             } else if node.name == "bebekGround" {
-                handleBebekTouch()
-                break
+                if isTeksDadIsComingActive {
+                    moveSceneIfFail()
+                } else {
+                    handleBebekTouch()
+                    break
+                }
             } else if node.name == "boxGround" {
-                handleBoxTouch()
-                break
+                if isTeksDadIsComingActive {
+                    moveSceneIfFail()
+                } else {
+                    handleBoxTouch()
+                    break
+                }
             } else if node.name == "doorGround" {
-                handleDoorTouch()
-                break
+                if isTeksDadIsComingActive {
+                    moveSceneIfFail()
+                } else {
+                    handleDoorTouch()
+                    break
+                }
             }
         }
     }
@@ -149,20 +239,23 @@ class Level1Stage2Scene: SKScene {
         self.setSwipeGesture(enabled: false)
 
         let target = CGPoint(x: door.position.x - 20, y: door.position.y - 90)
-        let distance = hypot(bayi.position.x - target.x, bayi.position.y - target.y)
+        let distance = hypot(
+            bayi.position.x - target.x, bayi.position.y - target.y)
         let kecepatanBayi: CGFloat = 130.0
         let duration = TimeInterval(distance / kecepatanBayi)
 
         let move = SKAction.move(to: target, duration: duration)
-        let walk = SKAction.group([move, WalkingAnimationBaby.walkForwardAnimation()])
+        let walk = SKAction.group([
+            move, WalkingAnimationBaby.walkForwardAnimation(),
+        ])
 
         bayi.run(walk, withKey: "walk")
         bayi.run(move) {
             self.bayi.removeAction(forKey: "walk")
-            
+
             if self.isBoxAtDoor {
                 print("Box sudah di pintu, bayi bisa naik dan buka pintu.")
-                
+
                 // Animasi lompat
                 self.jumpAnimation()
             } else {
@@ -176,19 +269,18 @@ class Level1Stage2Scene: SKScene {
     private func jumpAnimation() {
         let jumpFrames = [
             SKTexture(imageNamed: "baby_jumping1"),
-            SKTexture(imageNamed: "baby_jumping2")
+            SKTexture(imageNamed: "baby_jumping2"),
         ]
-        
+
         let jumpAction = SKAction.animate(with: jumpFrames, timePerFrame: 0.3)
         let jumpRepeat = SKAction.repeat(jumpAction, count: 4)
-        
+
         let jumpGroup = SKAction.group([jumpRepeat])
-        
+
         bayi.run(jumpGroup) {
             self.bayi.texture = SKTexture(imageNamed: "baby_sit")
         }
     }
-
 
     private func handlePictureFrameTouch() {
 
@@ -255,6 +347,39 @@ class Level1Stage2Scene: SKScene {
 
         if isBoxClicked {
             positionBabyNextToBox()
+            if !hasCameraSequenceRun {
+                hasCameraSequenceRun = true
+                if let cameraNode = cameraNode {
+                    let zoomIn = SKAction.scale(to: 0.5, duration: 1.0)
+                    let moveToBayi = SKAction.move(
+                        to: CGPoint(
+                            x: box.position.x, y: box.position.y + 80),
+                        duration: 1.0)
+                    let bayiFollowGroup = SKAction.group([zoomIn, moveToBayi])
+
+                    let wait1 = SKAction.wait(forDuration: 1.0)
+                    let moveToDoor = SKAction.move(
+                        to: CGPoint(x: size.width / 1.35, y: size.height / 2),
+                        duration: 1.0)
+                    let wait2 = SKAction.wait(forDuration: 1.0)
+                    let zoomOut = SKAction.scale(to: 1.0, duration: 1.0)
+                    let moveToCenter = SKAction.move(
+                        to: CGPoint(x: size.width / 2, y: size.height / 2),
+                        duration: 1.0)
+                    let zoomOutGroup = SKAction.group([zoomOut, moveToCenter])
+
+                    let sequence = SKAction.sequence([
+                        bayiFollowGroup,
+                        wait1,
+                        moveToDoor,
+                        wait2,
+                        zoomOutGroup,
+                    ])
+
+                    cameraNode.run(sequence)
+                }
+            }
+
         }
     }
 
