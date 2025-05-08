@@ -4,6 +4,7 @@
 //
 //  Created by Samuel Andrey Aji Prasetya on 06/05/25.
 //
+
 import SpriteKit
 import UIKit
 
@@ -24,6 +25,7 @@ class Level1Stage2Scene: SKScene {
     private var isWalkingAnimationPlaying = false
     private var isBoxAtDoor: Bool = false
     private var isBabyMove: Bool = false
+    private var isInteracting: Bool = false
 
     private var hasCameraSequenceRun = false
     private var cameraNode: SKCameraNode!
@@ -47,23 +49,25 @@ class Level1Stage2Scene: SKScene {
         scaleMode = .aspectFill
         setupScene()
     }
-    
-    func cameraSetup(){
+
+    func cameraSetup() {
         cameraNode.position = CGPoint(x: size.width * 0.5, y: size.height * 0.5)
         self.camera = cameraNode
         self.addChild(cameraNode)
     }
-    
+
     func zoomCamera() {
         let zoom = SKAction.scale(by: 0.8, duration: 2.0)
-        let reSize = CGPoint(x: cameraNode.position.x + 80, y: cameraNode.position.y - 20)
+        let reSize = CGPoint(
+            x: cameraNode.position.x + 80, y: cameraNode.position.y - 20)
 
-        let cameraGroup = SKAction.group([zoom, SKAction.move(to: reSize, duration: 2.0)])
-        if !isBabyMove{
+        let cameraGroup = SKAction.group([
+            zoom, SKAction.move(to: reSize, duration: 2.0),
+        ])
+        if !isBabyMove {
             cameraNode.run(cameraGroup)
-                isBabyMove = true
-            
-            
+            isBabyMove = true
+
         }
     }
 
@@ -97,10 +101,18 @@ class Level1Stage2Scene: SKScene {
 
     func createBebek() {
         bebek = SKSpriteNode(imageNamed: "bebekGround")
+
+        let targetWidth: CGFloat = 50.0
+
+        let textureSize = bebek.texture?.size() ?? CGSize(width: 1, height: 1)
+        let scaleFactor = targetWidth / textureSize.width
+
+        bebek.setScale(scaleFactor)
+
         bebek.position = CGPoint(x: size.width * 0.75, y: size.height * 0.10)
         bebek.zPosition = 101
         bebek.name = "bebekGround"
-        bebek.size = CGSize(width: 50, height: 40)
+
         addChild(bebek)
     }
 
@@ -116,14 +128,15 @@ class Level1Stage2Scene: SKScene {
 
     func createPictureFrame() {
         pictureFrame = SKSpriteNode(imageNamed: "foto")
-        
+
         let targetWidth: CGFloat = 75.0
 
-        let textureSize = pictureFrame.texture?.size() ?? CGSize(width: 1, height: 1)
+        let textureSize =
+            pictureFrame.texture?.size() ?? CGSize(width: 1, height: 1)
         let scaleFactor = targetWidth / textureSize.width
 
         pictureFrame.setScale(scaleFactor)
-        
+
         pictureFrame.position = CGPoint(
             x: size.width / 2 + 100, y: size.height * 0.75 - 40)
         pictureFrame.zPosition = 0
@@ -154,7 +167,7 @@ class Level1Stage2Scene: SKScene {
         let scaleFactor = targetWidth / textureSize.width
 
         door.setScale(scaleFactor)
-        
+
         door.position = CGPoint(
             x: size.width - door.size.width / 2,
             y: size.height - door.size.height + 30)
@@ -272,6 +285,10 @@ class Level1Stage2Scene: SKScene {
     }
 
     private func handleDoorTouch() {
+
+        guard !isInteracting else { return }
+        isInteracting = true
+
         isBoxClicked = false
         box.color = .white
         self.setSwipeGesture(enabled: false)
@@ -301,6 +318,8 @@ class Level1Stage2Scene: SKScene {
                 // Animasi gapai
                 self.jumpAnimation()
             }
+
+            self.isInteracting = false
         }
     }
 
@@ -317,10 +336,16 @@ class Level1Stage2Scene: SKScene {
 
         bayi.run(jumpGroup) {
             self.bayi.texture = SKTexture(imageNamed: "baby_sit")
+
+            self.isInteracting = false
         }
     }
 
     private func handlePictureFrameTouch() {
+
+        guard !isInteracting else { return }
+
+        isInteracting = true
 
         isBoxClicked = false
         self.setSwipeGesture(enabled: false)
@@ -348,10 +373,15 @@ class Level1Stage2Scene: SKScene {
         bayi.run(move) {
             self.bayi.removeAction(forKey: "walk")
             self.jumpAnimation()
+
+            self.isInteracting = false
         }
     }
 
     private func handleBebekTouch() {
+
+        guard !isInteracting else { return }
+        isInteracting = true
 
         self.setSwipeGesture(enabled: false)
         isBoxClicked = false
@@ -375,10 +405,16 @@ class Level1Stage2Scene: SKScene {
         bayi.run(move) {
             self.bayi.removeAction(forKey: "walk")
             self.bayi.texture = SKTexture(imageNamed: "baby_sit")
+
+            self.isInteracting = false
         }
     }
 
     private func handleBoxTouch() {
+
+        guard !isInteracting else { return }
+        isInteracting = true
+
         isBoxClicked.toggle()
         box.color = isBoxClicked ? .red : .white
         box.colorBlendFactor = isBoxClicked ? 0.5 : 0.0
@@ -415,11 +451,10 @@ class Level1Stage2Scene: SKScene {
                         zoomOutGroup,
                     ])
 
-                    cameraNode.run(sequence){
+                    cameraNode.run(sequence) {
                         self.zoomCamera()
                     }
-                    
-                    
+
                 }
             }
 
@@ -453,6 +488,8 @@ class Level1Stage2Scene: SKScene {
                 self.bayi.removeAction(forKey: "walk")
                 self.bayi.texture = SKTexture(imageNamed: "baby_sit")
                 self.enableSwipeAfterBoxAnimation()
+
+                self.isInteracting = false
             }
         } else {
             self.enableSwipeAfterBoxAnimation()
