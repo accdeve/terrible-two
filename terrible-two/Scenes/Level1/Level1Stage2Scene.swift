@@ -23,9 +23,10 @@ class Level1Stage2Scene: SKScene {
     private var movementTimer: Timer?
     private var isWalkingAnimationPlaying = false
     private var isBoxAtDoor: Bool = false
+    private var isBabyMove: Bool = false
 
     private var hasCameraSequenceRun = false
-    private var cameraNode: SKCameraNode?
+    private var cameraNode: SKCameraNode!
 
     var isTeksDadIsComingActive = false
     var teksDadIsComing: SKLabelNode!
@@ -45,6 +46,25 @@ class Level1Stage2Scene: SKScene {
         size = view.bounds.size
         scaleMode = .aspectFill
         setupScene()
+    }
+    
+    func cameraSetup(){
+        cameraNode.position = CGPoint(x: size.width * 0.5, y: size.height * 0.5)
+        self.camera = cameraNode
+        self.addChild(cameraNode)
+    }
+    
+    func zoomCamera() {
+        let zoom = SKAction.scale(by: 0.8, duration: 2.0)
+        let reSize = CGPoint(x: cameraNode.position.x + 50, y: cameraNode.position.y - 20)
+
+        let cameraGroup = SKAction.group([zoom, SKAction.move(to: reSize, duration: 2.0)])
+        if !isBabyMove{
+            cameraNode.run(cameraGroup)
+                isBabyMove = true
+            
+            
+        }
     }
 
     private func setupScene() {
@@ -201,7 +221,9 @@ class Level1Stage2Scene: SKScene {
         let nodesAtPoint = nodes(at: location)
 
         for node in nodesAtPoint {
+            zoomCamera()
             if node.name == "foto" {
+                isBabyMove = true
                 if isTeksDadIsComingActive {
                     moveSceneIfFail()
                 } else {
@@ -209,6 +231,7 @@ class Level1Stage2Scene: SKScene {
                     break
                 }
             } else if node.name == "bebekGround" {
+                isBabyMove = true
                 if isTeksDadIsComingActive {
                     moveSceneIfFail()
                 } else {
@@ -216,6 +239,7 @@ class Level1Stage2Scene: SKScene {
                     break
                 }
             } else if node.name == "boxGround" {
+                isBabyMove = true
                 if isTeksDadIsComingActive {
                     moveSceneIfFail()
                 } else {
@@ -223,6 +247,7 @@ class Level1Stage2Scene: SKScene {
                     break
                 }
             } else if node.name == "doorGround" {
+                isBabyMove = true
                 if isTeksDadIsComingActive {
                     moveSceneIfFail()
                 } else {
@@ -349,6 +374,7 @@ class Level1Stage2Scene: SKScene {
             positionBabyNextToBox()
             if !hasCameraSequenceRun {
                 hasCameraSequenceRun = true
+                isBabyMove = false
                 if let cameraNode = cameraNode {
                     let zoomIn = SKAction.scale(to: 0.5, duration: 1.0)
                     let moveToBayi = SKAction.move(
@@ -376,7 +402,11 @@ class Level1Stage2Scene: SKScene {
                         zoomOutGroup,
                     ])
 
-                    cameraNode.run(sequence)
+                    cameraNode.run(sequence){
+                        self.zoomCamera()
+                    }
+                    
+                    
                 }
             }
 
