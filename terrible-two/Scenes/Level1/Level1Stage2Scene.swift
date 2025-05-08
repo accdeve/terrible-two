@@ -56,7 +56,7 @@ class Level1Stage2Scene: SKScene {
     
     func zoomCamera() {
         let zoom = SKAction.scale(by: 0.8, duration: 2.0)
-        let reSize = CGPoint(x: cameraNode.position.x + 50, y: cameraNode.position.y - 20)
+        let reSize = CGPoint(x: cameraNode.position.x + 80, y: cameraNode.position.y - 20)
 
         let cameraGroup = SKAction.group([zoom, SKAction.move(to: reSize, duration: 2.0)])
         if !isBabyMove{
@@ -97,8 +97,8 @@ class Level1Stage2Scene: SKScene {
 
     func createBebek() {
         bebek = SKSpriteNode(imageNamed: "bebekGround")
-        bebek.position = CGPoint(x: size.width * 0.75, y: size.height * 0.20)
-        bebek.zPosition = 1
+        bebek.position = CGPoint(x: size.width * 0.75, y: size.height * 0.10)
+        bebek.zPosition = 101
         bebek.name = "bebekGround"
         bebek.size = CGSize(width: 50, height: 40)
         addChild(bebek)
@@ -116,10 +116,17 @@ class Level1Stage2Scene: SKScene {
 
     func createPictureFrame() {
         pictureFrame = SKSpriteNode(imageNamed: "foto")
+        
+        let targetWidth: CGFloat = 75.0
+
+        let textureSize = pictureFrame.texture?.size() ?? CGSize(width: 1, height: 1)
+        let scaleFactor = targetWidth / textureSize.width
+
+        pictureFrame.setScale(scaleFactor)
+        
         pictureFrame.position = CGPoint(
-            x: size.width / 2, y: size.height * 0.75)
+            x: size.width / 2 + 100, y: size.height * 0.75 - 40)
         pictureFrame.zPosition = 0
-        pictureFrame.size = CGSize(width: 40, height: 40)
         pictureFrame.name = "foto"
         addChild(pictureFrame)
     }
@@ -133,18 +140,24 @@ class Level1Stage2Scene: SKScene {
 
         box.setScale(scaleFactor)
 
-        box.position = CGPoint(x: size.width * 0.40, y: size.height * 0.12)
+        box.position = CGPoint(x: size.width * 0.50, y: size.height * 0.18)
         box.name = "boxGround"
         box.zPosition = 2
         addChild(box)
     }
 
     func createDoor() {
-        door = SKSpriteNode(imageNamed: "foto")
-        door.size = CGSize(width: 100, height: 200)  // Atur ukuran dulu
+        door = SKSpriteNode(imageNamed: "level1_door_closed")
+        let targetWidth: CGFloat = 76.0
+
+        let textureSize = door.texture?.size() ?? CGSize(width: 1, height: 1)
+        let scaleFactor = targetWidth / textureSize.width
+
+        door.setScale(scaleFactor)
+        
         door.position = CGPoint(
             x: size.width - door.size.width / 2,
-            y: size.height - door.size.height)
+            y: size.height - door.size.height + 30)
         door.name = "doorGround"
         door.zPosition = 0
         addChild(door)
@@ -162,7 +175,7 @@ class Level1Stage2Scene: SKScene {
         teksDadIsComing = SKLabelNode(fontNamed: "Chalkduster")
         teksDadIsComing.text = "Dad is coming"
         teksDadIsComing.fontColor = .black
-        teksDadIsComing.fontSize = 100
+        teksDadIsComing.fontSize = 50
         teksDadIsComing.position = CGPoint(
             x: size.width / 2, y: size.height / 2)
         teksDadIsComing.alpha = 0.0
@@ -193,9 +206,8 @@ class Level1Stage2Scene: SKScene {
     }
 
     func moveSceneIfFail() {
-        let nextScene = Level1Stage1Scene()
-        nextScene.scaleMode = .aspectFill
-        let transition = SKTransition.fade(withDuration: 1.0)
+        let nextScene = Level1Stage1Scene(size: self.size)
+        let transition = SKTransition.fade(withDuration: 1.5)
         self.view?.presentScene(nextScene, transition: transition)
     }
 
@@ -221,8 +233,8 @@ class Level1Stage2Scene: SKScene {
         let nodesAtPoint = nodes(at: location)
 
         for node in nodesAtPoint {
-            zoomCamera()
             if node.name == "foto" {
+                zoomCamera()
                 isBabyMove = true
                 if isTeksDadIsComingActive {
                     moveSceneIfFail()
@@ -231,6 +243,7 @@ class Level1Stage2Scene: SKScene {
                     break
                 }
             } else if node.name == "bebekGround" {
+                zoomCamera()
                 isBabyMove = true
                 if isTeksDadIsComingActive {
                     moveSceneIfFail()
@@ -239,7 +252,6 @@ class Level1Stage2Scene: SKScene {
                     break
                 }
             } else if node.name == "boxGround" {
-                isBabyMove = true
                 if isTeksDadIsComingActive {
                     moveSceneIfFail()
                 } else {
@@ -247,6 +259,7 @@ class Level1Stage2Scene: SKScene {
                     break
                 }
             } else if node.name == "doorGround" {
+                zoomCamera()
                 isBabyMove = true
                 if isTeksDadIsComingActive {
                     moveSceneIfFail()
@@ -314,7 +327,7 @@ class Level1Stage2Scene: SKScene {
         box.color = .white
 
         let target = CGPoint(
-            x: pictureFrame.position.x, y: pictureFrame.position.y - 200)
+            x: pictureFrame.position.x, y: pictureFrame.position.y - 170)
         let distance = hypot(
             bayi.position.x - target.x, bayi.position.y - target.y)
 
@@ -376,10 +389,10 @@ class Level1Stage2Scene: SKScene {
                 hasCameraSequenceRun = true
                 isBabyMove = false
                 if let cameraNode = cameraNode {
-                    let zoomIn = SKAction.scale(to: 0.5, duration: 1.0)
+                    let zoomIn = SKAction.scale(to: 0.5, duration: 2.0)
                     let moveToBayi = SKAction.move(
                         to: CGPoint(
-                            x: box.position.x, y: box.position.y + 100),
+                            x: box.position.x, y: box.position.y + 76),
                         duration: 1.0)
                     let bayiFollowGroup = SKAction.group([zoomIn, moveToBayi])
 
@@ -415,7 +428,7 @@ class Level1Stage2Scene: SKScene {
 
     private func positionBabyNextToBox() {
         let targetX = box.position.x - (box.size.width / 2) - bayiBoxOffset + 30
-        let targetPosition = CGPoint(x: targetX, y: 80)
+        let targetPosition = CGPoint(x: targetX, y: 100)
 
         let distance = hypot(
             bayi.position.x - targetPosition.x,
