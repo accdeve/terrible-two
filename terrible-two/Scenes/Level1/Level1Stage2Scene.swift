@@ -241,6 +241,7 @@ class Level1Stage2Scene: SKScene {
     }
 
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        guard !isInteracting else { return }
         guard let touch = touches.first else { return }
         let location = touch.location(in: self)
         let nodesAtPoint = nodes(at: location)
@@ -323,8 +324,9 @@ class Level1Stage2Scene: SKScene {
                 // Animasi gapai
                 self.jumpAnimation()
             }
-
+            
             self.isInteracting = false
+
         }
     }
 
@@ -342,8 +344,9 @@ class Level1Stage2Scene: SKScene {
         bayi.run(jumpGroup) {
             self.bayi.texture = SKTexture(imageNamed: "baby_sit")
 
-            self.isInteracting = false
         }
+        
+        self.isInteracting = false
     }
 
     private func handlePictureFrameTouch() {
@@ -462,8 +465,8 @@ class Level1Stage2Scene: SKScene {
 
                 }
             }
-
         }
+        self.isInteracting = false
     }
 
     private func positionBabyNextToBox() {

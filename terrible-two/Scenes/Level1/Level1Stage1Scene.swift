@@ -35,7 +35,7 @@ class Level1Stage1Scene: SKScene {
 
         // Setup scene elements
         setupBackground()
-        setupBabyBox()
+        // setupBabyBox()
         setupDoor()
         setupLightRays()
 
@@ -48,7 +48,7 @@ class Level1Stage1Scene: SKScene {
     }
 
     private func setupBackground() {
-        let background = SKSpriteNode(imageNamed: "babyboxbackground")
+        let background = SKSpriteNode(imageNamed: "level1_crib_background")
         background.zPosition = -1
         background.position = CGPoint(x: size.width / 2, y: size.height / 2)
 
@@ -88,7 +88,7 @@ class Level1Stage1Scene: SKScene {
     }
 
     private func setupDoor() {
-        let door = SKSpriteNode(imageNamed: "babyboxdoor")
+        let door = SKSpriteNode(imageNamed: "level1_crib_door")
         door.name = "door"
         door.zPosition = 2
         door.position = CGPoint(x: size.width / 2, y: size.height / 2)
