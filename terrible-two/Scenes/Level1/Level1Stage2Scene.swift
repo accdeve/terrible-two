@@ -36,6 +36,7 @@ class Level1Stage2Scene: SKScene {
     private var lastLeftMoveTime: Date?
     private let bayiBoxOffset: CGFloat = 60.0
     private let kecepatanBayi: CGFloat = 100.0
+    private let babyTargetWidth: CGFloat = 65.0
 
     private enum MovementDirection {
         case left
@@ -79,18 +80,15 @@ class Level1Stage2Scene: SKScene {
         createPictureFrame()
         createDoor()
         createCamera()
-        createTeksDadIsComing()
-        teksDadIsComingController()
+//        createTeksDadIsComing()
+//        teksDadIsComingController()
     }
 
     func createBaby() {
-        bayi = SKSpriteNode(imageNamed: "baby_sit")
-
-        let targetWidth: CGFloat = 75.0
+        bayi = SKSpriteNode(imageNamed: "baby_idle_stand")
 
         let textureSize = bayi.texture?.size() ?? CGSize(width: 1, height: 1)
-        let scaleFactor = targetWidth / textureSize.width
-
+        let scaleFactor = babyTargetWidth / textureSize.width
         bayi.setScale(scaleFactor)
 
         bayi.position = CGPoint(x: size.width * 0.25, y: size.height * 0.20)
@@ -285,9 +283,59 @@ class Level1Stage2Scene: SKScene {
         }
     }
 
-    private func handleDoorTouch() {
+    private func jumpAnimation() {
+        let jumpFrames = [
+            SKTexture(imageNamed: "baby_jumping1"),
+            SKTexture(imageNamed: "baby_jumping2")
+        ]
 
+        let jumpActions = jumpFrames.flatMap { texture in
+            [
+                SKAction.run { self.setBabyTexture(texture) },
+                SKAction.wait(forDuration: 0.3)
+            ]
+        }
+
+        let jumpSequence = SKAction.sequence(jumpActions)
+        let repeatJump = SKAction.repeat(jumpSequence, count: 4)
+
+        let resetIdle = SKAction.run {
+            self.setBabyTexture(SKTexture(imageNamed: "baby_idle_stand"))
+            self.isInteracting = false
+        }
+
+        let full = SKAction.sequence([repeatJump, resetIdle])
+        bayi.run(full)
+    }
+    
+    private func openDoorAnimation() {
+        let frames = (1...5).map {
+            SKTexture(imageNamed: "baby_open_door\($0)")
+        }
+        let babyActions = frames.map { texture in
+            SKAction.sequence([
+                SKAction.run { self.setBabyTexture(texture) },
+                SKAction.wait(forDuration: 0.2)
+            ])
+        }
+
+        let openDoorTexture = SKTexture(imageNamed: "level1_door_open")
+        let openDoorAction = SKAction.run {
+            self.door.texture = openDoorTexture
+            let scale = 76.0 / openDoorTexture.size().width
+            self.door.size = CGSize(
+                width: 76.0,
+                height: openDoorTexture.size().height * scale
+            )
+        }
+        
+        let sequence = SKAction.sequence(babyActions + [openDoorAction])
+        bayi.run(sequence)
+    }
+
+    private func handleDoorTouch() {
         guard !isInteracting else { return }
+        stopAllCurrentActions()
         isInteracting = true
 
         isBoxClicked = false
@@ -295,64 +343,37 @@ class Level1Stage2Scene: SKScene {
         self.setSwipeGesture(enabled: false)
 
         let target = CGPoint(x: door.position.x - 20, y: door.position.y - 90)
-        let distance = hypot(
-            bayi.position.x - target.x, bayi.position.y - target.y)
+        let distance = hypot(bayi.position.x - target.x, bayi.position.y - target.y)
         let kecepatanBayi: CGFloat = 130.0
         let duration = TimeInterval(distance / kecepatanBayi)
 
         let move = SKAction.move(to: target, duration: duration)
         let walk = SKAction.group([
-            move, WalkingAnimationBaby.walkForwardAnimation(),
+            move, WalkingAnimationBaby.walkForwardAnimation(using: self.setBabyTexture),
         ])
 
         bayi.run(walk, withKey: "walk")
         bayi.run(move) {
             self.bayi.removeAction(forKey: "walk")
+            self.setBabyTexture(SKTexture(imageNamed: "baby_idle_stand"))
 
             if self.isBoxAtDoor {
                 print("Box sudah di pintu, bayi bisa naik dan buka pintu.")
-
-                // Animasi lompat
-                self.jumpAnimation()
-                
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                self.openDoorAnimation()
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
                     self.transitionToNextScene()
                 }
-                
             } else {
                 print("Box belum di pintu, bayi ngambek.")
-                // Animasi gapai
                 self.jumpAnimation()
             }
-            
-            self.isInteracting = false
-
         }
-    }
-
-    private func jumpAnimation() {
-        let jumpFrames = [
-            SKTexture(imageNamed: "baby_jumping1"),
-            SKTexture(imageNamed: "baby_jumping2"),
-        ]
-
-        let jumpAction = SKAction.animate(with: jumpFrames, timePerFrame: 0.3)
-        let jumpRepeat = SKAction.repeat(jumpAction, count: 4)
-
-        let jumpGroup = SKAction.group([jumpRepeat])
-
-        bayi.run(jumpGroup) {
-            self.bayi.texture = SKTexture(imageNamed: "baby_sit")
-
-        }
-        
-        self.isInteracting = false
     }
 
     private func handlePictureFrameTouch() {
 
         guard !isInteracting else { return }
-
+        stopAllCurrentActions()
         isInteracting = true
 
         isBoxClicked = false
@@ -370,9 +391,9 @@ class Level1Stage2Scene: SKScene {
 
         let walkAnimation: SKAction
         if target.x > bayi.position.x {
-            walkAnimation = WalkingAnimationBaby.walkForwardAnimation()
+            walkAnimation = WalkingAnimationBaby.walkForwardAnimation(using: self.setBabyTexture)
         } else {
-            walkAnimation = WalkingAnimationBaby.walkBackwardAnimation()
+            walkAnimation = WalkingAnimationBaby.walkBackwardAnimation(using: self.setBabyTexture)
         }
 
         let walkAnimationGroup = SKAction.group([move, walkAnimation])
@@ -380,15 +401,14 @@ class Level1Stage2Scene: SKScene {
         bayi.run(walkAnimationGroup, withKey: "walk")
         bayi.run(move) {
             self.bayi.removeAction(forKey: "walk")
+            self.setBabyTexture(SKTexture(imageNamed: "baby_idle_stand"))
             self.jumpAnimation()
-
-            self.isInteracting = false
         }
     }
 
     private func handleBebekTouch() {
-
         guard !isInteracting else { return }
+        stopAllCurrentActions()
         isInteracting = true
 
         self.setSwipeGesture(enabled: false)
@@ -396,15 +416,14 @@ class Level1Stage2Scene: SKScene {
         box.color = .white
 
         let target = CGPoint(x: bebek.position.x - 50, y: bebek.position.y + 30)
-        let distance = hypot(
-            bayi.position.x - target.x, bayi.position.y - target.y)
+        let distance = hypot(bayi.position.x - target.x, bayi.position.y - target.y)
         let kecepatanBayi: CGFloat = 130.0
         let duration = TimeInterval(distance / kecepatanBayi)
 
         let animation: SKAction =
             target.x > bayi.position.x
-            ? WalkingAnimationBaby.walkForwardAnimation()
-            : WalkingAnimationBaby.walkBackwardAnimation()
+            ? WalkingAnimationBaby.walkForwardAnimation(using: self.setBabyTexture)
+            : WalkingAnimationBaby.walkBackwardAnimation(using: self.setBabyTexture)
 
         let move = SKAction.move(to: target, duration: duration)
         let walk = SKAction.group([move, animation])
@@ -412,8 +431,7 @@ class Level1Stage2Scene: SKScene {
         bayi.run(walk, withKey: "walk")
         bayi.run(move) {
             self.bayi.removeAction(forKey: "walk")
-            self.bayi.texture = SKTexture(imageNamed: "baby_sit")
-
+            self.setBabyTexture(SKTexture(imageNamed: "baby_idle_sit"))
             self.isInteracting = false
         }
     }
@@ -421,6 +439,7 @@ class Level1Stage2Scene: SKScene {
     private func handleBoxTouch() {
 
         guard !isInteracting else { return }
+        stopAllCurrentActions()
         isInteracting = true
 
         isBoxClicked.toggle()
@@ -470,37 +489,36 @@ class Level1Stage2Scene: SKScene {
     }
 
     private func positionBabyNextToBox() {
-        let targetX = box.position.x - (box.size.width / 2) - bayiBoxOffset + 30
+        let offset: CGFloat = bayiBoxOffset - 30
+
+        let targetX: CGFloat
+        if currentMovementDirection == .right {
+            targetX = box.position.x - (box.size.width / 2) - offset
+        } else {
+            targetX = box.position.x + (box.size.width / 2) + offset
+        }
+
         let targetPosition = CGPoint(x: targetX, y: 90)
+        let distance = hypot(bayi.position.x - targetPosition.x, bayi.position.y - targetPosition.y)
 
-        let distance = hypot(
-            bayi.position.x - targetPosition.x,
-            bayi.position.y - targetPosition.y)
         if distance > 10 {
-
-            let kecepatanBayi: CGFloat = 130.0
-            let duration = TimeInterval(distance / kecepatanBayi)
+            let duration = TimeInterval(distance / 130.0)
 
             let move = SKAction.move(to: targetPosition, duration: duration)
-
-            let walkAnimation: SKAction
-            if targetPosition.x > bayi.position.x {
-                walkAnimation = WalkingAnimationBaby.walkForwardAnimation()
-            } else {
-                walkAnimation = WalkingAnimationBaby.walkBackwardAnimation()
-            }
+            let walkAnimation = targetX > bayi.position.x
+                ? WalkingAnimationBaby.walkForwardAnimation(using: self.setBabyTexture)
+                : WalkingAnimationBaby.walkBackwardAnimation(using: self.setBabyTexture)
 
             bayi.run(SKAction.group([move, walkAnimation]), withKey: "walk")
-
             bayi.run(move) {
                 self.bayi.removeAction(forKey: "walk")
-                self.bayi.texture = SKTexture(imageNamed: "baby_sit")
+                self.setBabyTexture(SKTexture(imageNamed: "baby_idle_stand"))
                 self.enableSwipeAfterBoxAnimation()
-
                 self.isInteracting = false
             }
         } else {
             self.enableSwipeAfterBoxAnimation()
+            self.isInteracting = false
         }
     }
 
@@ -542,7 +560,7 @@ class Level1Stage2Scene: SKScene {
 
             case .ended, .cancelled, .failed:
                 stopContinuousMovement()
-                bayi.texture = SKTexture(imageNamed: "baby_sit")
+                bayi.texture = SKTexture(imageNamed: "baby_idle_stand")
 
             default:
                 break
@@ -555,67 +573,61 @@ class Level1Stage2Scene: SKScene {
 
         let moveInterval: TimeInterval = 0.05
 
-        movementTimer = Timer.scheduledTimer(
-            withTimeInterval: moveInterval, repeats: true
-        ) { [weak self] _ in
+        movementTimer = Timer.scheduledTimer(withTimeInterval: moveInterval, repeats: true) { [weak self] _ in
             guard let self = self else { return }
 
-            let distance: CGFloat =
-                self.currentMovementDirection == .right ? 5.0 : -10.0
-
-            // Gerakan macet saat narik box
-            if self.currentMovementDirection == .left {
-                let now = Date()
-                if let last = self.lastLeftMoveTime,
-                    now.timeIntervalSince(last) < 0.4
-                {
-                    return
-                }
-                self.lastLeftMoveTime = now
-            }
+            let distance: CGFloat = self.currentMovementDirection == .right ? 5.0 : -5.0
 
             // Batas kanan/kiri layar
+            let boxPosX = self.box.position.x + distance
             if self.currentMovementDirection == .right {
-                if self.box.position.x + distance > self.size.width
-                    - (self.box.size.width / 2) - 20
-                {
-                    return
-                }
+                let batasKanan = self.size.width - (self.box.size.width / 2) - 20
+                if boxPosX > batasKanan { return }
             } else {
-                if self.box.position.x + distance < self.box.size.width / 2 + 50
-                {
-                    return
-                }
+                let batasKiri = self.box.size.width / 2 + 360
+                if boxPosX < batasKiri { return }
             }
 
             // Gerakkan box
-            let moveAction = SKAction.moveBy(
-                x: distance, y: 0, duration: moveInterval)
+            let moveAction = SKAction.moveBy(x: distance, y: 0, duration: moveInterval)
             self.box.run(moveAction)
 
             self.updateBabyPosition()
 
+            // Cek apakah box sampai di depan pintu
             let predictedBoxX = self.box.position.x + distance
-            let batasKanan = self.size.width - (self.box.size.width / 2) - 25
-            self.isBoxAtDoor = predictedBoxX >= batasKanan
-            // print("Box Posisi X:", box.position.x, " | Batas Kanan:", batasKanan, " | isBoxAtDoor:", isBoxAtDoor)
+            let batasPintu = self.size.width - (self.box.size.width / 2) - 25
+            self.isBoxAtDoor = predictedBoxX >= batasPintu
 
-            // Jalankan animasi kalau belum aktif
+            // Mulai animasi jalan
             if !self.isWalkingAnimationPlaying {
                 self.isWalkingAnimationPlaying = true
 
-                let walkAnimation =
-                    self.currentMovementDirection == .right
-                    ? WalkingAnimationBaby.walkLowRight()
-                    : WalkingAnimationBaby.walkLowRightBackward()
+                let walkAnim: SKAction
+                if self.currentMovementDirection == .right {
+                    walkAnim = WalkingAnimationBaby.walkLowRight(using: self.setBabyTexture)
+                } else {
+                    walkAnim = WalkingAnimationBaby.walkLowRightBackward(using: self.setBabyTexture)
+                }
 
-                self.bayi.run(SKAction.repeatForever(walkAnimation))
+                let repeatAnim = SKAction.repeatForever(walkAnim)
+                self.bayi.run(repeatAnim, withKey: "walk")
             }
         }
     }
 
     private func updateBabyPosition() {
-        let targetX = box.position.x - (box.size.width / 2) - bayiBoxOffset + 30
+        let offset: CGFloat = bayiBoxOffset - 30
+
+        let targetX: CGFloat
+        if currentMovementDirection == .right {
+            // posisi bayi di kiri box
+            targetX = box.position.x - (box.size.width / 2) - offset
+        } else {
+            // posisi bayi di kanan box
+            targetX = box.position.x + (box.size.width / 2) + offset
+        }
+
         bayi.position.x = targetX
     }
 
@@ -626,7 +638,7 @@ class Level1Stage2Scene: SKScene {
         if isWalkingAnimationPlaying {
             isWalkingAnimationPlaying = false
             bayi.removeAllActions()
-            bayi.texture = SKTexture(imageNamed: "baby_sit")
+            setBabyTexture(SKTexture(imageNamed: "baby_idle_stand"))
         }
     }
 
@@ -656,7 +668,6 @@ class Level1Stage2Scene: SKScene {
         }
     }
 
-    
     private func transitionToNextScene() {
         let blackOverlay = SKSpriteNode(color: .black, size: size)
         blackOverlay.position = CGPoint(x: size.width / 2, y: size.height / 2)
@@ -693,4 +704,18 @@ class Level1Stage2Scene: SKScene {
         }
     }
     
+    internal func setBabyTexture(_ texture: SKTexture) {
+        bayi.texture = texture
+        let scale = babyTargetWidth / texture.size().width
+        bayi.size = CGSize(width: babyTargetWidth, height: texture.size().height * scale)
+    }
+    
+    private func stopAllCurrentActions() {
+        bayi.removeAllActions()
+        setBabyTexture(SKTexture(imageNamed: "baby_idle_stand"))
+        bayi.removeAction(forKey: "walk")
+        bayi.removeAction(forKey: "move")
+        bayi.removeAction(forKey: "jump")
+    }
+
 }
