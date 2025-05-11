@@ -36,7 +36,7 @@ class Level1Stage2Scene: SKScene {
     private var lastLeftMoveTime: Date?
     private let bayiBoxOffset: CGFloat = 60.0
     private let kecepatanBayi: CGFloat = 100.0
-    private let babyTargetWidth: CGFloat = 65.0
+    private let babyTargetWidth: CGFloat = 120
 
     private enum MovementDirection {
         case left
@@ -312,25 +312,31 @@ class Level1Stage2Scene: SKScene {
         let frames = (1...5).map {
             SKTexture(imageNamed: "baby_open_door\($0)")
         }
-        let babyActions = frames.map { texture in
-            SKAction.sequence([
-                SKAction.run { self.setBabyTexture(texture) },
-                SKAction.wait(forDuration: 0.2)
-            ])
+
+        let actions: [SKAction] = frames.enumerated().map { (index, texture) in
+            var frameActions: [SKAction] = [
+                SKAction.run { self.setBabyTexture(texture) }
+            ]
+
+            if index >= 2 {
+                let naikSedikit = SKAction.moveBy(x: 0, y: 20, duration: 0.2)
+                frameActions.append(naikSedikit)
+            }
+
+            frameActions.append(SKAction.wait(forDuration: 0.2))
+
+            return SKAction.sequence(frameActions)
         }
 
         let openDoorTexture = SKTexture(imageNamed: "level1_door_open")
         let openDoorAction = SKAction.run {
             self.door.texture = openDoorTexture
             let scale = 76.0 / openDoorTexture.size().width
-            self.door.size = CGSize(
-                width: 76.0,
-                height: openDoorTexture.size().height * scale
-            )
+            self.door.size = CGSize(width: 76.0, height: openDoorTexture.size().height * scale)
         }
-        
-        let sequence = SKAction.sequence(babyActions + [openDoorAction])
-        bayi.run(sequence)
+
+        let fullSequence = SKAction.sequence(actions + [openDoorAction])
+        bayi.run(fullSequence)
     }
 
     private func handleDoorTouch() {
