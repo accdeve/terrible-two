@@ -6,14 +6,14 @@
 //
 
 import SwiftUI
-
-import SwiftUI
+import AVFoundation
 
 struct GameSettingsView: View {
-    @State private var dragOffsetVolume: CGFloat = 0
-    @State private var dragOffsetSound: CGFloat = 0
+    @Environment(\.dismiss) var dismiss
     @State private var isChecked = false
-    let sliderWidth: CGFloat = 300
+    @State private var isClicked = false
+    
+    @StateObject var audioManager = AudioManager()
     
     var body: some View {
         VStack{
@@ -21,83 +21,131 @@ struct GameSettingsView: View {
                 Image("Latar_Popup")
                     .resizable()
                     .frame(width: 500, height: 400)
-                VStack{
-                    VStack(spacing: 10) {
+                VStack (spacing: 20){
+                    Text("Settings")
+                        .font(.custom("Chalkduster", size: 32))
+                    VStack(spacing: 20) {
                         Text("Volume")
-                            .font(.headline)
-                        CustomSlider(dragOffset: $dragOffsetVolume, sliderWidth: sliderWidth)
+                            .font(.custom("Chalkduster", size: 24))
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .padding(.leading, 20)
+                        HStack {
+                            CustomSlider(
+                                value: Binding<Float>(
+                                    get: {
+                                        audioManager.isMuted ? 0 : audioManager.volume
+                                    },
+                                    set: { newVal in
+                                        audioManager.isMuted = false
+                                        audioManager.volume = newVal
+                                    }
+                                ),
+                                minValue: 0,
+                                maxValue: 1
+                            )
+                                .frame(height: 30)
+                        }
+                        .padding(.horizontal)
                     }
-                    VStack(spacing: 10) {
-                        Text("Sound FX")
-                            .font(.headline)
-                        CustomSlider(dragOffset: $dragOffsetSound, sliderWidth: sliderWidth)
-                    }
+                    //Spacer()
                     HStack{
-                        Spacer()
+                        //Spacer()
                         Text("Mute")
+                            .font(.custom("Chalkduster", size: 24))
+                            .padding(.leading, 20)
                         Spacer()
                         Button(action: {
-                            isChecked.toggle()
+                            audioManager.isMuted.toggle()
                         }) {
-                            Image(isChecked ? "Settings_Check" : "Settings_Uncheck")
+                            Image(audioManager.isMuted ? "Settings_Check" : "Settings_Uncheck")
                                 .resizable()
-                                .frame(width: 20, height: 20)
-                        }
-                        Spacer()
+                                .frame(width: 30, height: 30)
+                        }.padding(.trailing, 20)
+                        //Spacer()
                         
                     }
-                    ZStack{
-                        Image("Image")
+                    Button(action: {
+                        dismiss()
+                    }) {
+                        Image("Back_Button")
                             .resizable()
-                            .frame(width: 100, height: 150)
-                            .position(x: 155, y: 25)
-                        Text("Back")
-                            .font(.caption)
-                            .foregroundColor(.white)
-                            .position(x: 155, y: 25)
-                    }.frame(width: 300, height: 300)
-                        //.background(.blue)
-                    
-                }.position(x: 250, y: 325)
-            }.frame(maxHeight: .infinity)
-        }.position(x: 175, y: 150)
-            .frame(width: 400, height: 300)
-        
+                            .frame(width: 150, height: 100)
+                            .padding(.vertical, -15)
+                    }
+                }
+                //.background(Color.green)
+                    .frame(width: 400, height: 100)
+            }
+        }
     }
 }
 
 struct CustomSlider: View {
-    @Binding var dragOffset: CGFloat
-    let sliderWidth: CGFloat
+    @Binding var value: Float
+    let minValue: Float
+    let maxValue: Float
 
     var body: some View {
-        GeometryReader { geo in
+        GeometryReader { geometry in
             ZStack(alignment: .leading) {
+                // Background track image
                 Image("Settings_Slider_Bar")
                     .resizable()
-                    .frame(width: sliderWidth)
-                    .position(x: geo.size.width / 2, y: geo.size.height / 2)
 
+                // Filled track
+                Rectangle()
+                    .foregroundColor(.clear)
+                    .frame(width: CGFloat(value / (maxValue - minValue)) * geometry.size.width, height: 8)
+                    .cornerRadius(4)
+
+                // Thumb
                 Image("Settings_Slider_Icon")
                     .resizable()
-                    .frame(width: 50, height: 50)
-                    .position(
-                        x: geo.size.width / 2 + dragOffset,
-                        y: geo.size.height / 2
-                    )
-                    .gesture(
-                        DragGesture(minimumDistance: 0)
-                            .onChanged { value in
-                                let localX = value.location.x - geo.size.width / 2
-                                let halfWidth = sliderWidth / 2
-                                dragOffset = min(max(localX, -halfWidth), halfWidth)
-                            }
+                    .frame(width: 40, height: 40)
+                    .offset(x: CGFloat(value / (maxValue - minValue)) * geometry.size.width - 12)
+                    .gesture(DragGesture()
+                        .onChanged { gesture in
+                            let newValue = min(max(0, gesture.location.x / geometry.size.width), 1)
+                            self.value = minValue + Float(newValue) * (maxValue - minValue)
+                        }
                     )
             }
         }
-        .frame(height: 60)
+        .frame(height: 30)
     }
 }
+
+//class AudioManager: ObservableObject {
+//    var player: AVAudioPlayer?
+//
+//    @Published var volume: Float {
+//        didSet {
+//            player?.volume = volume
+//            UserDefaults.standard.set(volume, forKey: "bgVolume")
+//        }
+//    }
+//    
+//    @Published var isMuted: Bool = false {
+//            didSet {
+//                player?.volume = isMuted ? 0 : volume
+//            }
+//        }
+//
+//    init() {
+//        let savedVolume = UserDefaults.standard.float(forKey: "bgVolume")
+//        self.volume = savedVolume == 0 ? 0.5 : savedVolume
+//        if let url = Bundle.main.url(forResource: "no-copyright-music-corporate-background-334863", withExtension: "mp3") {
+//            do {
+//                player = try AVAudioPlayer(contentsOf: url)
+//                player?.volume = volume
+//                player?.numberOfLoops = -1
+//                player?.play()
+//            } catch {
+//                print("Error loading audio: \(error)")
+//            }
+//        }
+//    }
+//}
 
 #Preview {
     GameSettingsView()

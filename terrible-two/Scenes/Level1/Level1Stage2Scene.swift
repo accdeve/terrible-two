@@ -6,15 +6,19 @@
 //
 import SpriteKit
 import UIKit
+import SwiftUI
 
 class Level1Stage2Scene: SKScene {
 
+    //private var audioManager: AudioManager!
+    
     private var bayi: SKSpriteNode!
     private var bebek: SKSpriteNode!
     private var box: SKSpriteNode!
     private var pictureFrame: SKSpriteNode!
     private var background: SKSpriteNode!
     private var door: SKSpriteNode!
+//    private var settingsButton: SKSpriteNode!
 
     private var isBoxClicked: Bool = false
     private var swipeRightRecognizer: UISwipeGestureRecognizer?
@@ -41,6 +45,10 @@ class Level1Stage2Scene: SKScene {
     }
 
     private var currentMovementDirection: MovementDirection = .right
+    
+//    override func update(_ currentTime: TimeInterval) {
+//        settingsButton.position = CGPoint(self.size.scaledBy(aspectRatio: UIScreen.main.bounds.width / UIScreen.main.bounds.height).width) - 50, (self.size.scaledBy(aspectRatio: UIScreen.main.bounds.width / UIScreen.main.bounds.height).height) - 50)
+//    }
 
     override func didMove(to view: SKView) {
         size = view.bounds.size
@@ -77,7 +85,17 @@ class Level1Stage2Scene: SKScene {
         createCamera()
         createTeksDadIsComing()
         teksDadIsComingController()
+        //createSettingsButton()
     }
+    
+//    func createSettingsButton(){
+//        settingsButton = SKSpriteNode(imageNamed: "bebekGround")
+//        settingsButton.name = "settings"
+//        settingsButton.position = CGPoint(x: 800, y: 350)
+//        settingsButton.size = CGSize(width: 100, height: 100)
+//        settingsButton.zPosition = 100
+//        addChild(settingsButton)
+//    }
 
     func createBaby() {
         bayi = SKSpriteNode(imageNamed: "baby_sit")
@@ -214,6 +232,14 @@ class Level1Stage2Scene: SKScene {
 
         run(repeatAction, withKey: "teksDadIsComingController")
     }
+    
+    func presentSettings() {
+        if let view = self.view, let vc = view.window?.rootViewController {
+            let settingsVC = UIHostingController(rootView: GameSettingsView())
+            settingsVC.modalPresentationStyle = .overFullScreen
+            vc.present(settingsVC, animated: true, completion: nil)
+        }
+    }
 
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         guard let touch = touches.first else { return }
@@ -221,7 +247,12 @@ class Level1Stage2Scene: SKScene {
         let nodesAtPoint = nodes(at: location)
 
         for node in nodesAtPoint {
-            zoomCamera()
+            if node.name == "settings"{
+                presentSettings()
+                
+            }else{
+                zoomCamera()
+            }
             if node.name == "foto" {
                 isBabyMove = true
                 if isTeksDadIsComingActive {
