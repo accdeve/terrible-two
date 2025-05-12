@@ -29,6 +29,9 @@ class Level1Stage1Scene: SKScene {
     // Visual effects
     private var lightRays: SKNode?
     private var particles: SKEmitterNode?
+    
+    //is finish
+    var gameState: GameState?
 
     override func didMove(to view: SKView) {
         backgroundColor = .white
@@ -36,6 +39,7 @@ class Level1Stage1Scene: SKScene {
         // Setup scene elements
         setupBackground()
         // setupBabyBox()
+        setupBabyPillow()
         setupDoor()
         setupLightRays()
 
@@ -46,6 +50,17 @@ class Level1Stage1Scene: SKScene {
         }
         run(SKAction.sequence([waitAction, showHintAction]))
     }
+    
+    private func setupBabyPillow() {
+            let bantal = SKSpriteNode(imageNamed: "bantal")
+            bantal.zPosition = 2
+            bantal.position = CGPoint(x: size.width / 2, y: size.height / 2)
+            let widthScale = size.width / bantal.size.width
+            let heightScale = size.height / bantal.size.height
+            let scale = max(widthScale, heightScale)
+            bantal.setScale(scale)
+            addChild(bantal)
+        }
 
     private func setupBackground() {
         let background = SKSpriteNode(imageNamed: "level1_crib_background")
@@ -98,19 +113,22 @@ class Level1Stage1Scene: SKScene {
         let scale = max(widthScale, heightScale)
         door.setScale(scale)
 
-        // Store initial position for later use
         doorInitialPosition = door.position
         doorMaxHeight = doorOpenHeight
-        
-        let scaleUp = SKAction.scale(by: 1.03, duration: 2.2)
-        scaleUp.timingMode = .easeInEaseOut
-        let scaleDown = SKAction.scale(to: scale, duration: 2.2)
-        scaleDown.timingMode = .easeInEaseOut
-        let breathe = SKAction.sequence([scaleUp, scaleDown])
-        door.run(SKAction.repeatForever(breathe))
-        
+
         addChild(door)
-    }
+
+        let moveUp = SKAction.moveBy(x: 0, y: 2, duration: 0.6)
+        moveUp.timingMode = .easeOut
+
+        let moveDown = SKAction.moveBy(x: 0, y: -2, duration: 0.6)
+        moveDown.timingMode = .easeIn
+
+        let bounce = SKAction.sequence([moveUp, moveDown])
+        let bounceForever = SKAction.repeatForever(bounce)
+
+        door.run(bounceForever)
+        }
 
     private func setupLightRays() {
         let rays = SKNode()
@@ -388,7 +406,7 @@ class Level1Stage1Scene: SKScene {
         hint.text = "Drag the door UP to open"
         hint.fontSize = 24
         hint.fontColor = .white
-        hint.position = CGPoint(x: 0, y: 20)
+        hint.position = CGPoint(x: 0, y: 0)
         hintContainer.addChild(hint)
 
         // Detailed instruction
@@ -396,7 +414,7 @@ class Level1Stage1Scene: SKScene {
         detailHint.text = "Use your finger to pull the lid upward"
         detailHint.fontSize = 16
         detailHint.fontColor = SKColor(white: 0.9, alpha: 1.0)
-        detailHint.position = CGPoint(x: 0, y: 0)
+        detailHint.position = CGPoint(x: 0, y: -20)
         hintContainer.addChild(detailHint)
 
         // Animated drag motion
@@ -468,9 +486,10 @@ class Level1Stage1Scene: SKScene {
             DispatchQueue.main.asyncAfter(
                 deadline: .now() + self.transitionDelay
             ) {
-                let nextScene = Level1Stage2Scene(size: self.size)
-                let transition = SKTransition.fade(withDuration: 1.5)
-                self.view?.presentScene(nextScene, transition: transition)
+                  self.gameState?.isFinish = true
+//                let nextScene = Level1Stage2Scene(size: self.size)
+//                let transition = SKTransition.fade(withDuration: 1.5)
+//                self.view?.presentScene(nextScene, transition: transition)
             }
         }
     }

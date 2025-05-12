@@ -14,7 +14,7 @@ struct terrible_twoApp: App {
     
     var body: some Scene {
         WindowGroup {
-            Level12View()
+            GameStartView()
         }
     }
 }

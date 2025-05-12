@@ -34,6 +34,7 @@ class Level1Stage2Scene: SKScene {
     private var hasCameraSequenceRun = false
     private var cameraNode: SKCameraNode!
 
+    var hintContainer = SKNode()
     var isTeksDadIsComingActive = false
     var teksDadIsComing: SKLabelNode!
 
@@ -87,8 +88,8 @@ class Level1Stage2Scene: SKScene {
         createCar()
         createBunnyDoll()
         createTeddyBear()
-//        createTeksDadIsComing()
-//        teksDadIsComingController()
+        createTeksDadIsComing()
+        teksDadIsComingController()
     }
 
     func createBaby() {
@@ -98,7 +99,7 @@ class Level1Stage2Scene: SKScene {
         let scaleFactor = babyTargetWidth / textureSize.width
         bayi.setScale(scaleFactor)
 
-        bayi.position = CGPoint(x: size.width * 0.25, y: size.height * 0.20)
+        bayi.position = CGPoint(x: size.width * 0.25,  y: size.height * 0.20)
         bayi.zPosition = 100
         bayi.name = "bayi"
         addChild(bayi)
@@ -241,22 +242,40 @@ class Level1Stage2Scene: SKScene {
     }
 
     func createTeksDadIsComing() {
+        hintContainer.name = "hint"
+        hintContainer.position = CGPoint(
+            x: size.width / 1.71,
+            y: size.height * 0.75)
+        hintContainer.zPosition = 100
+        hintContainer.alpha = 0.0
+
+        let background = SKShapeNode(
+            rectOf: CGSize(width: size.width * 0.6, height: size.height * 0.125),
+            cornerRadius: 16)
+        background.fillColor = SKColor.black.withAlphaComponent(0.6)
+        background.strokeColor = SKColor.white.withAlphaComponent(0.8)
+        background.lineWidth = 1
+        background.alpha = 0.9
+        hintContainer.addChild(background)
+
         teksDadIsComing = SKLabelNode(fontNamed: "Chalkduster")
-        teksDadIsComing.text = "Dad is coming"
-        teksDadIsComing.fontColor = .black
-        teksDadIsComing.fontSize = 50
-        teksDadIsComing.position = CGPoint(
-            x: size.width / 2, y: size.height / 2)
+        teksDadIsComing.text = "Dad is coming ‼️"
+        teksDadIsComing.fontColor = .white
+        teksDadIsComing.fontSize = 25
+        teksDadIsComing.position = CGPoint(x: 0, y: -10)
         teksDadIsComing.alpha = 0.0
-        teksDadIsComing.zPosition = 100
-        addChild(teksDadIsComing)
-    }
+        teksDadIsComing.zPosition = 101
+
+        hintContainer.addChild(teksDadIsComing)
+
+        addChild(hintContainer)
+        }
 
     func showBlinkingText() {
         teksDadIsComing.alpha = 0.0
 
-        let blinkOn = SKAction.fadeAlpha(to: 1.0, duration: 0.5)
-        let blinkOff = SKAction.fadeAlpha(to: 0.0, duration: 0.5)
+        let blinkOn = SKAction.fadeAlpha(to: 0.0, duration: 0.7)
+        let blinkOff = SKAction.fadeAlpha(to: 1.0, duration: 0.7)
         let blink = SKAction.sequence([blinkOff, blinkOn])
         let blinkRepeat = SKAction.repeat(blink, count: 5)
 
@@ -266,11 +285,13 @@ class Level1Stage2Scene: SKScene {
 
         let hideText = SKAction.run { [weak self] in
             self?.teksDadIsComing.alpha = 0.0
+            self?.hintContainer.alpha = 0.0
         }
 
         let sequence = SKAction.sequence([
             blinkRepeat, deactivateFlag, hideText,
         ])
+        hintContainer.run(sequence)
         teksDadIsComing.run(sequence)
     }
 
@@ -283,11 +304,12 @@ class Level1Stage2Scene: SKScene {
     func teksDadIsComingController() {
         let initialWait = SKAction.wait(forDuration: 5.0)
         let activateFlag = SKAction.run { [weak self] in
-            self?.isTeksDadIsComingActive = true
+            SKAction.wait(forDuration: 60.0)
             self?.showBlinkingText()
+            self?.isTeksDadIsComingActive = true
         }
 
-        let waitBetweenRepeats = SKAction.wait(forDuration: 10.0)
+        let waitBetweenRepeats = SKAction.wait(forDuration: 60.0)
         let sequence = SKAction.sequence([
             initialWait, activateFlag, waitBetweenRepeats,
         ])
