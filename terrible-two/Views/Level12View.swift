@@ -69,7 +69,7 @@ struct Level12View: View {
                     Button(action: {
                         showingSettings = !showingSettings
                     }) {
-                        Image(systemName: "gearshape.fill")
+                        Image("Setting_Icon")
                             .resizable()
                             .frame(width: 40, height: 40)
                             .padding()

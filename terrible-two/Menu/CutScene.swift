@@ -15,9 +15,8 @@ struct CutSceneView: View {
     var body: some View {
         ZStack {
             if let url = Bundle.main.url(forResource: videoName, withExtension: fileExtension) {
-                VideoPlayer(player: AVPlayerPlayerHandler.shared.setupPlayer(url: url) {
-                    // Callback ketika video selesai
-                    DispatchQueue.main.asyncAfter(deadline: .now()) {
+                VideoPlayerView(player: AVPlayerPlayerHandler.shared.setupPlayer(url: url) {
+                    DispatchQueue.main.async {
                         navigateToNext = true
                     }
                 })
@@ -27,7 +26,6 @@ struct CutSceneView: View {
                     .foregroundColor(.red)
             }
 
-            // Navigation trigger
             NavigationLink(destination: Level1View().navigationBarBackButtonHidden(true), isActive: $navigateToNext) {
                 EmptyView()
             }
@@ -35,6 +33,23 @@ struct CutSceneView: View {
         .onAppear {
             AVPlayerPlayerHandler.shared.player?.play()
         }
+    }
+}
+
+
+struct VideoPlayerView: UIViewControllerRepresentable {
+    let player: AVPlayer
+
+    func makeUIViewController(context: Context) -> AVPlayerViewController {
+        let controller = AVPlayerViewController()
+        controller.player = player
+        controller.showsPlaybackControls = false // ini menyembunyikan kontrol
+        // controller.videoGravity = .resizeAspectFill
+        return controller
+    }
+
+    func updateUIViewController(_ uiViewController: AVPlayerViewController, context: Context) {
+        // Tidak perlu update player
     }
 }
 
