@@ -20,7 +20,7 @@ struct GameStartView: View {
                 }
 
                 // Background image full screen
-                Image("level1_background")
+                Image("menu_background")
                     .resizable()
                     .scaledToFill()
                     .ignoresSafeArea()
@@ -30,15 +30,15 @@ struct GameStartView: View {
                     .opacity(0.7)
 
                 Text("Terrible Two")
-                    .font(.system(size: 52, weight: .bold, design: .rounded))
+                    .font(.custom("Chalkduster", size: 52))
                     .foregroundColor(.white)
                     .position(
                         x: UIScreen.main.bounds.midX,
-                        y: UIScreen.main.bounds.midY - 150)
+                        y: UIScreen.main.bounds.midY - 130)
 
-                Text("Play Game")
+                Text("Press here to start")
                     .font(
-                        .system(size: 24, weight: .bold, design: .rounded)
+                        .custom("Chalkduster", size: 24)
                     )
                     .foregroundColor(.white)
                     .opacity(blink ? 1 : 0) // Ganti ini
