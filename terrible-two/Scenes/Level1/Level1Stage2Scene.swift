@@ -303,18 +303,21 @@ class Level1Stage2Scene: SKScene {
 
     func teksDadIsComingController() {
         let initialWait = SKAction.wait(forDuration: 5.0)
-        let activateFlag = SKAction.run { [weak self] in
-            SKAction.wait(forDuration: 60.0)
+
+        let showBlinking = SKAction.run { [weak self] in
             self?.showBlinkingText()
             self?.isTeksDadIsComingActive = true
         }
 
-        let waitBetweenRepeats = SKAction.wait(forDuration: 60.0)
-        let sequence = SKAction.sequence([
-            initialWait, activateFlag, waitBetweenRepeats,
-        ])
-        let repeatAction = SKAction.repeatForever(sequence)
+        let delayBetweenRepeats = SKAction.wait(forDuration: 60.0)
 
+        let sequence = SKAction.sequence([
+            initialWait,
+            showBlinking,
+            delayBetweenRepeats
+        ])
+
+        let repeatAction = SKAction.repeatForever(sequence)
         run(repeatAction, withKey: "teksDadIsComingController")
     }
 
@@ -970,6 +973,8 @@ class Level1Stage2Scene: SKScene {
     }
 
     private func transitionToNextScene() {
+        isTeksDadIsComingActive = false
+        
         let blackOverlay = SKSpriteNode(color: .black, size: size)
         blackOverlay.position = CGPoint(x: size.width / 2, y: size.height / 2)
         blackOverlay.zPosition = 110

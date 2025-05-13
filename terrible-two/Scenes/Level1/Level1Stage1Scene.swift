@@ -487,9 +487,9 @@ class Level1Stage1Scene: SKScene {
                 deadline: .now() + self.transitionDelay
             ) {
                   self.gameState?.isFinish = true
-//                let nextScene = Level1Stage2Scene(size: self.size)
-//                let transition = SKTransition.fade(withDuration: 1.5)
-//                self.view?.presentScene(nextScene, transition: transition)
+                let nextScene = Level1Stage2Scene(size: self.size)
+                let transition = SKTransition.fade(withDuration: 1.5)
+                self.view?.presentScene(nextScene, transition: transition)
             }
         }
     }
