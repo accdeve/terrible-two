@@ -747,7 +747,6 @@ class Level1Stage2Scene: SKScene {
     }
 
     private func handleBoxTouch() {
-
         guard !isInteracting else { return }
         stopAllCurrentActions()
         isInteracting = true
