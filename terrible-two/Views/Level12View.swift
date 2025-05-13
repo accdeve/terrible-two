@@ -31,7 +31,6 @@ class AudioManager: ObservableObject {
         if let url = Bundle.main.url(forResource: "backsound", withExtension: "m4a") {
             do {
                 player = try AVAudioPlayer(contentsOf: url)
-//                player?.volume = 0
                 player?.volume = volume 
                 player?.numberOfLoops = -1
                 player?.play()
@@ -85,7 +84,6 @@ struct Level12View: View {
 
         }
         .onAppear {
-            // Trigger fade-in
             fadeIn = false
         }
 //

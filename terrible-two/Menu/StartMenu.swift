@@ -13,8 +13,7 @@ struct GameStartView: View {
         NavigationStack {
             ZStack {
                 NavigationLink(
-                    destination: CutSceneView(videoName: "cutscene").navigationBarBackButtonHidden(true)
-, isActive: $navigateToGame
+                    destination: CutSceneView(videoName: "cutscene").navigationBarBackButtonHidden(true), isActive: $navigateToGame
                 ) {
                     EmptyView()
                 }

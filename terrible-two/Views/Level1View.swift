@@ -26,11 +26,11 @@ struct Level1View: View {
                 SpriteView(scene: scene)
                     .ignoresSafeArea()
 
-                    .fullScreenCover(isPresented: $navigateToNext) {
-                        Level12View()
-                            .transition(.opacity)
-                            .background(Color.black) // start with dark
-                    }
+//                    .fullScreenCover(isPresented: $navigateToNext) {
+//                        Level12View()
+//                            .transition(.opacity)
+//                            .background(Color.black) // start with dark
+//                    }
 
             }
         }

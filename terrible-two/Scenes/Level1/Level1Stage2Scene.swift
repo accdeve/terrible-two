@@ -9,6 +9,8 @@ import SpriteKit
 import UIKit
 
 class Level1Stage2Scene: SKScene {
+    
+    weak var gameState: GameState?
 
     private var bayi: SKSpriteNode!
     private var bebek: SKSpriteNode!
@@ -288,9 +290,13 @@ class Level1Stage2Scene: SKScene {
             self?.hintContainer.alpha = 0.0
         }
 
+        let stopBlinking = SKAction.run {
+            self.removeAction(forKey: "teksDadIsComingController")
+        }
         let sequence = SKAction.sequence([
-            blinkRepeat, deactivateFlag, hideText,
+            blinkRepeat, deactivateFlag, hideText, stopBlinking
         ])
+
         hintContainer.run(sequence)
         teksDadIsComing.run(sequence)
     }
