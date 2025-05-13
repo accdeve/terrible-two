@@ -28,11 +28,11 @@ class AudioManager: ObservableObject {
     init() {
         let savedVolume = UserDefaults.standard.float(forKey: "bgVolume")
         self.volume = savedVolume == 0 ? 0.5 : savedVolume
-        if let url = Bundle.main.url(forResource: "no-copyright-music-corporate-background-334863", withExtension: "mp3") {
+        if let url = Bundle.main.url(forResource: "backsound", withExtension: "m4a") {
             do {
                 player = try AVAudioPlayer(contentsOf: url)
-                player?.volume = 0
-//                player?.volume = volume yang asli ini ygy
+//                player?.volume = 0
+                player?.volume = volume 
                 player?.numberOfLoops = -1
                 player?.play()
             } catch {

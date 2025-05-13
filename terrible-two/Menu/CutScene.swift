@@ -17,7 +17,7 @@ struct CutSceneView: View {
             if let url = Bundle.main.url(forResource: videoName, withExtension: fileExtension) {
                 VideoPlayer(player: AVPlayerPlayerHandler.shared.setupPlayer(url: url) {
                     // Callback ketika video selesai
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                    DispatchQueue.main.asyncAfter(deadline: .now()) {
                         navigateToNext = true
                     }
                 })
@@ -28,7 +28,7 @@ struct CutSceneView: View {
             }
 
             // Navigation trigger
-            NavigationLink(destination: Level1View(), isActive: $navigateToNext) {
+            NavigationLink(destination: Level1View().navigationBarBackButtonHidden(true), isActive: $navigateToNext) {
                 EmptyView()
             }
         }

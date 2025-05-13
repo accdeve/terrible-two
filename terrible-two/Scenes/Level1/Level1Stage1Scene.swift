@@ -470,7 +470,7 @@ class Level1Stage1Scene: SKScene {
             guard let self = self else { return }
 
             let transitionLabel = SKLabelNode(fontNamed: "AvenirNext-DemiBold")
-            transitionLabel.text = "Help The Baby Escape..."
+            transitionLabel.text = "Find an object to help the baby escape the room"
             transitionLabel.fontSize = 32
             transitionLabel.fontColor = .white
             transitionLabel.position = CGPoint(
