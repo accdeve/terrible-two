@@ -58,12 +58,6 @@ struct Level12View: View {
             SpriteView(scene: scene)
                 .ignoresSafeArea()
 
-            // Lapisan hitam untuk fade-in
-            
-            if showingSettings {
-                GameSettingsView(audioManager: audioManager)
-            }
-            
             Color.black
                 .ignoresSafeArea()
                 .opacity(fadeIn ? 1 : 0)
@@ -82,12 +76,11 @@ struct Level12View: View {
                             .padding(.trailing, -45)
                             .padding(.top, 10)
                     }
+                } .
+                sheet(isPresented: $showingSettings) {
+                    GameSettingsView(audioManager: audioManager)
                 }
                 Spacer()
-            }
-            
-            if showingSettings {
-                GameSettingsView(audioManager: audioManager)
             }
 
         }
