@@ -5,9 +5,9 @@
 //  Created by aditya ibnu arif on 06/05/25.
 //
 
+import AVFoundation
 import SpriteKit
 import SwiftUI
-import AVFoundation
 
 class AudioManager: ObservableObject {
     var player: AVAudioPlayer?
@@ -18,20 +18,22 @@ class AudioManager: ObservableObject {
             UserDefaults.standard.set(volume, forKey: "bgVolume")
         }
     }
-    
+
     @Published var isMuted: Bool = true {
-            didSet {
-                player?.volume = isMuted ? 0 : volume
-            }
+        didSet {
+            player?.volume = isMuted ? 0 : volume
+        }
     }
 
     init() {
         let savedVolume = UserDefaults.standard.float(forKey: "bgVolume")
         self.volume = savedVolume == 0 ? 0.5 : savedVolume
-        if let url = Bundle.main.url(forResource: "backsound", withExtension: "m4a") {
+        if let url = Bundle.main.url(
+            forResource: "backsound", withExtension: "m4a")
+        {
             do {
                 player = try AVAudioPlayer(contentsOf: url)
-                player?.volume = volume 
+                player?.volume = volume
                 player?.numberOfLoops = -1
                 player?.play()
             } catch {
@@ -45,7 +47,7 @@ struct Level12View: View {
     @StateObject var audioManager = AudioManager()
     @State private var showingSettings = false
     @State private var fadeIn = true
-    
+
     var scene: SKScene {
         let scene = Level1Stage2Scene()
         scene.scaleMode = .resizeFill
@@ -61,7 +63,7 @@ struct Level12View: View {
                 .ignoresSafeArea()
                 .opacity(fadeIn ? 1 : 0)
                 .animation(.easeOut(duration: 1.5), value: fadeIn)
-            
+
             VStack {
                 HStack {
                     Spacer()
@@ -75,8 +77,7 @@ struct Level12View: View {
                             .padding(.trailing, -45)
                             .padding(.top, 10)
                     }
-                } .
-                sheet(isPresented: $showingSettings) {
+                }.sheet(isPresented: $showingSettings) {
                     GameSettingsView(audioManager: audioManager)
                 }
                 Spacer()
@@ -86,10 +87,8 @@ struct Level12View: View {
         .onAppear {
             fadeIn = false
         }
-//
     }
 }
-
 
 #Preview {
     Level12View()

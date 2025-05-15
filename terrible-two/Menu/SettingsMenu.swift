@@ -5,23 +5,23 @@
 //  Created by steven on 08/05/25.
 //
 
-import SwiftUI
 import AVFoundation
+import SwiftUI
 
 struct GameSettingsView: View {
     @Environment(\.dismiss) var dismiss
     @State private var isChecked = true
     @State private var isClicked = false
-    
+
     @StateObject var audioManager = AudioManager()
-    
+
     var body: some View {
-        VStack{
+        VStack {
             ZStack {
                 Image("Latar_Popup")
                     .resizable()
                     .frame(width: 500, height: 400)
-                VStack (spacing: 20){
+                VStack(spacing: 20) {
                     Text("Settings")
                         .font(.custom("Chalkduster", size: 32))
                     VStack(spacing: 20) {
@@ -33,7 +33,8 @@ struct GameSettingsView: View {
                             CustomSlider(
                                 value: Binding<Float>(
                                     get: {
-                                        audioManager.isMuted ? 0 : audioManager.volume
+                                        audioManager.isMuted
+                                            ? 0 : audioManager.volume
                                     },
                                     set: { newVal in
                                         audioManager.isMuted = false
@@ -43,12 +44,12 @@ struct GameSettingsView: View {
                                 minValue: 0,
                                 maxValue: 1
                             )
-                                .frame(height: 30)
+                            .frame(height: 30)
                         }
                         .padding(.horizontal)
                     }
                     //Spacer()
-                    HStack{
+                    HStack {
                         //Spacer()
                         Text("Mute")
                             .font(.custom("Chalkduster", size: 24))
@@ -57,12 +58,15 @@ struct GameSettingsView: View {
                         Button(action: {
                             audioManager.isMuted.toggle()
                         }) {
-                            Image(audioManager.isMuted ? "Settings_Check" : "Settings_Uncheck")
-                                .resizable()
-                                .frame(width: 30, height: 30)
+                            Image(
+                                audioManager.isMuted
+                                    ? "Settings_Check" : "Settings_Uncheck"
+                            )
+                            .resizable()
+                            .frame(width: 30, height: 30)
                         }.padding(.trailing, 20)
                         //Spacer()
-                        
+
                     }
                     Button(action: {
                         dismiss()
@@ -74,7 +78,7 @@ struct GameSettingsView: View {
                     }
                 }
                 //.background(Color.green)
-                    .frame(width: 400, height: 100)
+                .frame(width: 400, height: 100)
             }
         }
     }
@@ -95,19 +99,32 @@ struct CustomSlider: View {
                 // Filled track
                 Rectangle()
                     .foregroundColor(.clear)
-                    .frame(width: CGFloat(value / (maxValue - minValue)) * geometry.size.width, height: 8)
+                    .frame(
+                        width: CGFloat(value / (maxValue - minValue))
+                            * geometry.size.width, height: 8
+                    )
                     .cornerRadius(4)
 
                 // Thumb
                 Image("Settings_Slider_Icon")
                     .resizable()
                     .frame(width: 40, height: 40)
-                    .offset(x: CGFloat(value / (maxValue - minValue)) * geometry.size.width - 12)
-                    .gesture(DragGesture()
-                        .onChanged { gesture in
-                            let newValue = min(max(0, gesture.location.x / geometry.size.width), 1)
-                            self.value = minValue + Float(newValue) * (maxValue - minValue)
-                        }
+                    .offset(
+                        x: CGFloat(value / (maxValue - minValue))
+                            * geometry.size.width - 12
+                    )
+                    .gesture(
+                        DragGesture()
+                            .onChanged { gesture in
+                                let newValue = min(
+                                    max(
+                                        0,
+                                        gesture.location.x / geometry.size.width
+                                    ), 1)
+                                self.value =
+                                    minValue + Float(newValue)
+                                    * (maxValue - minValue)
+                            }
                     )
             }
         }

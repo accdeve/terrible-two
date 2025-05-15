@@ -11,7 +11,7 @@ import SwiftUI
 struct Level1View: View {
     @StateObject private var gameState = GameState()
     @State private var navigateToNext = false
-    
+
     var scene: SKScene {
         let scene = Level1Stage1Scene(size: UIScreen.main.bounds.size)
         scene.scaleMode = .resizeFill
@@ -24,13 +24,11 @@ struct Level1View: View {
             ZStack {
                 SpriteView(scene: scene)
                     .ignoresSafeArea()
-
 //                    .fullScreenCover(isPresented: $navigateToNext) {
 //                        Level12View()
 //                            .transition(.opacity)
 //                            .background(Color.black) // start with dark
 //                    }
-
             }
         }
         .onReceive(gameState.$isFinish) { isFinish in
@@ -40,7 +38,6 @@ struct Level1View: View {
         }
     }
 }
-
 
 #Preview {
     Level1View()

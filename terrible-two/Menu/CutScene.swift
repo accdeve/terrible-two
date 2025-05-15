@@ -1,3 +1,4 @@
+import AVKit
 //
 //  CutScene.swift
 //  terrible-two
@@ -5,7 +6,6 @@
 //  Created by aditya ibnu arif on 12/05/25.
 //
 import SwiftUI
-import AVKit
 
 struct CutSceneView: View {
     let videoName: String
@@ -14,19 +14,26 @@ struct CutSceneView: View {
 
     var body: some View {
         ZStack {
-            if let url = Bundle.main.url(forResource: videoName, withExtension: fileExtension) {
-                VideoPlayerView(player: AVPlayerPlayerHandler.shared.setupPlayer(url: url) {
-                    DispatchQueue.main.async {
-                        navigateToNext = true
+            if let url = Bundle.main.url(
+                forResource: videoName, withExtension: fileExtension)
+            {
+                VideoPlayerView(
+                    player: AVPlayerPlayerHandler.shared.setupPlayer(url: url) {
+                        DispatchQueue.main.async {
+                            navigateToNext = true
+                        }
                     }
-                })
+                )
                 .ignoresSafeArea()
             } else {
                 Text("Video not found")
                     .foregroundColor(.red)
             }
 
-            NavigationLink(destination: Level1View().navigationBarBackButtonHidden(true), isActive: $navigateToNext) {
+            NavigationLink(
+                destination: Level1View().navigationBarBackButtonHidden(true),
+                isActive: $navigateToNext
+            ) {
                 EmptyView()
             }
         }
@@ -36,19 +43,20 @@ struct CutSceneView: View {
     }
 }
 
-
 struct VideoPlayerView: UIViewControllerRepresentable {
     let player: AVPlayer
 
     func makeUIViewController(context: Context) -> AVPlayerViewController {
         let controller = AVPlayerViewController()
         controller.player = player
-        controller.showsPlaybackControls = false // ini menyembunyikan kontrol
+        controller.showsPlaybackControls = false  // ini menyembunyikan kontrol
         // controller.videoGravity = .resizeAspectFill
         return controller
     }
 
-    func updateUIViewController(_ uiViewController: AVPlayerViewController, context: Context) {
+    func updateUIViewController(
+        _ uiViewController: AVPlayerViewController, context: Context
+    ) {
         // Tidak perlu update player
     }
 }
@@ -79,7 +87,6 @@ class AVPlayerPlayerHandler: ObservableObject {
         return player!
     }
 }
-
 
 #Preview {
     CutSceneView(videoName: "cutscene")

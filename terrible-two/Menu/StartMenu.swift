@@ -13,7 +13,9 @@ struct GameStartView: View {
         NavigationStack {
             ZStack {
                 NavigationLink(
-                    destination: CutSceneView(videoName: "cutscene").navigationBarBackButtonHidden(true), isActive: $navigateToGame
+                    destination: CutSceneView(videoName: "cutscene")
+                        .navigationBarBackButtonHidden(true),
+                    isActive: $navigateToGame
                 ) {
                     EmptyView()
                 }
@@ -40,7 +42,7 @@ struct GameStartView: View {
                         .custom("Chalkduster", size: 24)
                     )
                     .foregroundColor(.white)
-                    .opacity(blink ? 1 : 0) // Ganti ini
+                    .opacity(blink ? 1 : 0)  // Ganti ini
                     .position(
                         x: UIScreen.main.bounds.midX,
                         y: UIScreen.main.bounds.midY + 170
@@ -49,7 +51,10 @@ struct GameStartView: View {
                         navigateToGame = true
                     }
                     .onAppear {
-                        withAnimation(Animation.easeInOut(duration: 0.8).repeatForever(autoreverses: true)) {
+                        withAnimation(
+                            Animation.easeInOut(duration: 0.8).repeatForever(
+                                autoreverses: true)
+                        ) {
                             blink.toggle()
                         }
                     }

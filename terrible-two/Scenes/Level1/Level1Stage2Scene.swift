@@ -9,7 +9,7 @@ import SpriteKit
 import UIKit
 
 class Level1Stage2Scene: SKScene {
-    
+
     weak var gameState: GameState?
 
     private var bayi: SKSpriteNode!
@@ -101,7 +101,7 @@ class Level1Stage2Scene: SKScene {
         let scaleFactor = babyTargetWidth / textureSize.width
         bayi.setScale(scaleFactor)
 
-        bayi.position = CGPoint(x: size.width * 0.25,  y: size.height * 0.20)
+        bayi.position = CGPoint(x: size.width * 0.25, y: size.height * 0.20)
         bayi.zPosition = 100
         bayi.name = "bayi"
         addChild(bayi)
@@ -191,7 +191,7 @@ class Level1Stage2Scene: SKScene {
         background.size = size
         addChild(background)
     }
-    
+
     func createCar() {
         car = SKSpriteNode(imageNamed: "car")
 
@@ -208,35 +208,39 @@ class Level1Stage2Scene: SKScene {
 
         addChild(car)
     }
-    
+
     func createTeddyBear() {
         teddyBear = SKSpriteNode(imageNamed: "teddy_bear")
 
         let targetWidth: CGFloat = 50.0
 
-        let textureSize = teddyBear.texture?.size() ?? CGSize(width: 1, height: 1)
+        let textureSize =
+            teddyBear.texture?.size() ?? CGSize(width: 1, height: 1)
         let scaleFactor = targetWidth / textureSize.width
 
         teddyBear.setScale(scaleFactor)
 
-        teddyBear.position = CGPoint(x: size.width * 0.40, y: size.height * 0.10 + 20)
+        teddyBear.position = CGPoint(
+            x: size.width * 0.40, y: size.height * 0.10 + 20)
         teddyBear.zPosition = 99
         teddyBear.name = "teddyBear"
 
         addChild(teddyBear)
     }
-    
+
     func createBunnyDoll() {
         bunnyDoll = SKSpriteNode(imageNamed: "bunny_doll")
 
         let targetWidth: CGFloat = 45.0
 
-        let textureSize = bunnyDoll.texture?.size() ?? CGSize(width: 1, height: 1)
+        let textureSize =
+            bunnyDoll.texture?.size() ?? CGSize(width: 1, height: 1)
         let scaleFactor = targetWidth / textureSize.width
 
         bunnyDoll.setScale(scaleFactor)
 
-        bunnyDoll.position = CGPoint(x: size.width * 0.35, y: size.height * 0.12 + 20)
+        bunnyDoll.position = CGPoint(
+            x: size.width * 0.35, y: size.height * 0.12 + 20)
         bunnyDoll.zPosition = 99
         bunnyDoll.name = "bunnyDoll"
 
@@ -252,7 +256,8 @@ class Level1Stage2Scene: SKScene {
         hintContainer.alpha = 0.0
 
         let background = SKShapeNode(
-            rectOf: CGSize(width: size.width * 0.6, height: size.height * 0.125),
+            rectOf: CGSize(
+                width: size.width * 0.6, height: size.height * 0.125),
             cornerRadius: 16)
         background.fillColor = SKColor.black.withAlphaComponent(0.6)
         background.strokeColor = SKColor.white.withAlphaComponent(0.8)
@@ -271,7 +276,7 @@ class Level1Stage2Scene: SKScene {
         hintContainer.addChild(teksDadIsComing)
 
         addChild(hintContainer)
-        }
+    }
 
     func showBlinkingText() {
         teksDadIsComing.alpha = 0.0
@@ -294,7 +299,7 @@ class Level1Stage2Scene: SKScene {
             self.removeAction(forKey: "teksDadIsComingController")
         }
         let sequence = SKAction.sequence([
-            blinkRepeat, deactivateFlag, hideText, stopBlinking
+            blinkRepeat, deactivateFlag, hideText, stopBlinking,
         ])
 
         hintContainer.run(sequence)
@@ -320,7 +325,7 @@ class Level1Stage2Scene: SKScene {
         let sequence = SKAction.sequence([
             initialWait,
             showBlinking,
-            delayBetweenRepeats
+            delayBetweenRepeats,
         ])
 
         let repeatAction = SKAction.repeatForever(sequence)
@@ -402,13 +407,13 @@ class Level1Stage2Scene: SKScene {
     private func jumpAnimation() {
         let jumpFrames = [
             SKTexture(imageNamed: "baby_jumping1"),
-            SKTexture(imageNamed: "baby_jumping2")
+            SKTexture(imageNamed: "baby_jumping2"),
         ]
 
         let jumpActions = jumpFrames.flatMap { texture in
             [
                 SKAction.run { self.setBabyTexture(texture) },
-                SKAction.wait(forDuration: 0.3)
+                SKAction.wait(forDuration: 0.3),
             ]
         }
 
@@ -423,7 +428,7 @@ class Level1Stage2Scene: SKScene {
         let full = SKAction.sequence([repeatJump, resetIdle])
         bayi.run(full)
     }
-    
+
     private func openDoorAnimation() {
         let frames = (1...5).map {
             SKTexture(imageNamed: "baby_open_door\($0)")
@@ -448,20 +453,21 @@ class Level1Stage2Scene: SKScene {
         let openDoorAction = SKAction.run {
             self.door.texture = openDoorTexture
             let scale = 76.0 / openDoorTexture.size().width
-            self.door.size = CGSize(width: 76.0, height: openDoorTexture.size().height * scale)
+            self.door.size = CGSize(
+                width: 76.0, height: openDoorTexture.size().height * scale)
         }
 
         let fullSequence = SKAction.sequence(actions + [openDoorAction])
         bayi.run(fullSequence)
     }
-    
+
     private func playWithBebekAnimation() {
         let tiltLeft = SKAction.rotate(toAngle: CGFloat(-0.1), duration: 0.1)
         let tiltRight = SKAction.rotate(toAngle: CGFloat(0.1), duration: 0.1)
         let reset = SKAction.rotate(toAngle: 0.0, duration: 0.1)
 
         let wiggle = SKAction.sequence([
-            tiltLeft, tiltRight, tiltLeft, tiltRight, reset
+            tiltLeft, tiltRight, tiltLeft, tiltRight, reset,
         ])
 
         let bounceUp = SKAction.moveBy(x: 0, y: 10, duration: 0.1)
@@ -478,12 +484,14 @@ class Level1Stage2Scene: SKScene {
         let fullSequence = SKAction.sequence([repeatPlay, finishInteraction])
         bebek.run(fullSequence)
     }
-    
+
     private func playWithCarAnimation() {
         let tiltLeft = SKAction.rotate(toAngle: CGFloat(-0.05), duration: 0.2)
         let tiltRight = SKAction.rotate(toAngle: CGFloat(0.05), duration: 0.2)
         let resetTilt = SKAction.rotate(toAngle: 0.0, duration: 0.1)
-        let tiltSequence = SKAction.sequence([tiltLeft, tiltRight, tiltLeft, tiltRight, resetTilt])
+        let tiltSequence = SKAction.sequence([
+            tiltLeft, tiltRight, tiltLeft, tiltRight, resetTilt,
+        ])
 
         let moveForward = SKAction.moveBy(x: 15, y: 0, duration: 0.2)
         let moveBackward = SKAction.moveBy(x: -15, y: 0, duration: 0.2)
@@ -499,16 +507,16 @@ class Level1Stage2Scene: SKScene {
         let fullSequence = SKAction.sequence([repeatPlay, finishInteraction])
         car.run(fullSequence)
     }
-    
+
     private func playWithTeddyBearAnimation() {
 
         let tiltLeft = SKAction.rotate(toAngle: CGFloat(-0.08), duration: 0.3)
         let tiltRight = SKAction.rotate(toAngle: CGFloat(0.08), duration: 0.3)
         let resetTilt = SKAction.rotate(toAngle: 0.0, duration: 0.2)
         let tiltSequence = SKAction.sequence([
-            tiltLeft, tiltRight, tiltLeft, tiltRight, resetTilt
+            tiltLeft, tiltRight, tiltLeft, tiltRight, resetTilt,
         ])
-        
+
         let moveUp = SKAction.moveBy(x: 0, y: 8, duration: 0.3)
         let moveDown = SKAction.moveBy(x: 0, y: -8, duration: 0.3)
         let bounceSequence = SKAction.sequence([moveUp, moveDown])
@@ -523,16 +531,16 @@ class Level1Stage2Scene: SKScene {
         let fullSequence = SKAction.sequence([repeatPlay, finishInteraction])
         teddyBear.run(fullSequence)
     }
-    
+
     private func playWithBunnyDollAnimation() {
 
         let tiltLeft = SKAction.rotate(toAngle: CGFloat(-0.08), duration: 0.3)
         let tiltRight = SKAction.rotate(toAngle: CGFloat(0.08), duration: 0.3)
         let resetTilt = SKAction.rotate(toAngle: 0.0, duration: 0.2)
         let tiltSequence = SKAction.sequence([
-            tiltLeft, tiltRight, tiltLeft, tiltRight, resetTilt
+            tiltLeft, tiltRight, tiltLeft, tiltRight, resetTilt,
         ])
-        
+
         let moveUp = SKAction.moveBy(x: 0, y: 8, duration: 0.3)
         let moveDown = SKAction.moveBy(x: 0, y: -8, duration: 0.3)
         let bounceSequence = SKAction.sequence([moveUp, moveDown])
@@ -558,13 +566,16 @@ class Level1Stage2Scene: SKScene {
         self.setSwipeGesture(enabled: false)
 
         let target = CGPoint(x: door.position.x - 20, y: door.position.y - 90)
-        let distance = hypot(bayi.position.x - target.x, bayi.position.y - target.y)
+        let distance = hypot(
+            bayi.position.x - target.x, bayi.position.y - target.y)
         let kecepatanBayi: CGFloat = 130.0
         let duration = TimeInterval(distance / kecepatanBayi)
 
         let move = SKAction.move(to: target, duration: duration)
         let walk = SKAction.group([
-            move, WalkingAnimationBaby.walkForwardAnimation(using: self.setBabyTexture),
+            move,
+            WalkingAnimationBaby.walkForwardAnimation(
+                using: self.setBabyTexture),
         ])
 
         bayi.run(walk, withKey: "walk")
@@ -606,9 +617,11 @@ class Level1Stage2Scene: SKScene {
 
         let walkAnimation: SKAction
         if target.x > bayi.position.x {
-            walkAnimation = WalkingAnimationBaby.walkForwardAnimation(using: self.setBabyTexture)
+            walkAnimation = WalkingAnimationBaby.walkForwardAnimation(
+                using: self.setBabyTexture)
         } else {
-            walkAnimation = WalkingAnimationBaby.walkBackwardAnimation(using: self.setBabyTexture)
+            walkAnimation = WalkingAnimationBaby.walkBackwardAnimation(
+                using: self.setBabyTexture)
         }
 
         let walkAnimationGroup = SKAction.group([move, walkAnimation])
@@ -631,14 +644,17 @@ class Level1Stage2Scene: SKScene {
         box.color = .white
 
         let target = CGPoint(x: bebek.position.x - 50, y: bebek.position.y + 30)
-        let distance = hypot(bayi.position.x - target.x, bayi.position.y - target.y)
+        let distance = hypot(
+            bayi.position.x - target.x, bayi.position.y - target.y)
         let kecepatanBayi: CGFloat = 130.0
         let duration = TimeInterval(distance / kecepatanBayi)
 
         let animation: SKAction =
             target.x > bayi.position.x
-            ? WalkingAnimationBaby.walkForwardAnimation(using: self.setBabyTexture)
-            : WalkingAnimationBaby.walkBackwardAnimation(using: self.setBabyTexture)
+            ? WalkingAnimationBaby.walkForwardAnimation(
+                using: self.setBabyTexture)
+            : WalkingAnimationBaby.walkBackwardAnimation(
+                using: self.setBabyTexture)
 
         let move = SKAction.move(to: target, duration: duration)
         let walk = SKAction.group([move, animation])
@@ -647,11 +663,11 @@ class Level1Stage2Scene: SKScene {
         bayi.run(move) {
             self.bayi.removeAction(forKey: "walk")
             self.setBabyTexture(SKTexture(imageNamed: "baby_idle_sit"))
-        
+
             self.playWithBebekAnimation()
         }
     }
-    
+
     private func handleCarTouch() {
         guard !isInteracting else { return }
         stopAllCurrentActions()
@@ -662,14 +678,17 @@ class Level1Stage2Scene: SKScene {
         box.color = .white
 
         let target = CGPoint(x: car.position.x - 50, y: car.position.y + 30)
-        let distance = hypot(bayi.position.x - target.x, bayi.position.y - target.y)
+        let distance = hypot(
+            bayi.position.x - target.x, bayi.position.y - target.y)
         let kecepatanBayi: CGFloat = 130.0
         let duration = TimeInterval(distance / kecepatanBayi)
 
         let animation: SKAction =
             target.x > bayi.position.x
-            ? WalkingAnimationBaby.walkForwardAnimation(using: self.setBabyTexture)
-            : WalkingAnimationBaby.walkBackwardAnimation(using: self.setBabyTexture)
+            ? WalkingAnimationBaby.walkForwardAnimation(
+                using: self.setBabyTexture)
+            : WalkingAnimationBaby.walkBackwardAnimation(
+                using: self.setBabyTexture)
 
         let move = SKAction.move(to: target, duration: duration)
         let walk = SKAction.group([move, animation])
@@ -678,11 +697,11 @@ class Level1Stage2Scene: SKScene {
         bayi.run(move) {
             self.bayi.removeAction(forKey: "walk")
             self.setBabyTexture(SKTexture(imageNamed: "baby_idle_sit"))
-        
+
             self.playWithCarAnimation()
         }
     }
-    
+
     private func handleTeddBearTouch() {
         guard !isInteracting else { return }
         stopAllCurrentActions()
@@ -692,15 +711,19 @@ class Level1Stage2Scene: SKScene {
         isBoxClicked = false
         box.color = .white
 
-        let target = CGPoint(x: teddyBear.position.x + 50, y: teddyBear.position.y + 10)
-        let distance = hypot(bayi.position.x - target.x, bayi.position.y - target.y)
+        let target = CGPoint(
+            x: teddyBear.position.x + 50, y: teddyBear.position.y + 10)
+        let distance = hypot(
+            bayi.position.x - target.x, bayi.position.y - target.y)
         let kecepatanBayi: CGFloat = 130.0
         let duration = TimeInterval(distance / kecepatanBayi)
 
         let animation: SKAction =
             target.x > bayi.position.x
-            ? WalkingAnimationBaby.walkForwardAnimation(using: self.setBabyTexture)
-            : WalkingAnimationBaby.walkBackwardAnimation(using: self.setBabyTexture)
+            ? WalkingAnimationBaby.walkForwardAnimation(
+                using: self.setBabyTexture)
+            : WalkingAnimationBaby.walkBackwardAnimation(
+                using: self.setBabyTexture)
 
         let move = SKAction.move(to: target, duration: duration)
         let walk = SKAction.group([move, animation])
@@ -708,13 +731,13 @@ class Level1Stage2Scene: SKScene {
         bayi.run(walk, withKey: "walk")
         bayi.run(move) {
             self.bayi.removeAction(forKey: "walk")
-        
+
             self.setBabyTexture(SKTexture(imageNamed: "baby_idle_sit_flip"))
 
             self.playWithTeddyBearAnimation()
         }
     }
-    
+
     private func handleBunnyDollTouch() {
         guard !isInteracting else { return }
         stopAllCurrentActions()
@@ -724,15 +747,19 @@ class Level1Stage2Scene: SKScene {
         isBoxClicked = false
         box.color = .white
 
-        let target = CGPoint(x: bunnyDoll.position.x - 55, y: bunnyDoll.position.y)
-        let distance = hypot(bayi.position.x - target.x, bayi.position.y - target.y)
+        let target = CGPoint(
+            x: bunnyDoll.position.x - 55, y: bunnyDoll.position.y)
+        let distance = hypot(
+            bayi.position.x - target.x, bayi.position.y - target.y)
         let kecepatanBayi: CGFloat = 130.0
         let duration = TimeInterval(distance / kecepatanBayi)
 
         let animation: SKAction =
             target.x > bayi.position.x
-            ? WalkingAnimationBaby.walkForwardAnimation(using: self.setBabyTexture)
-            : WalkingAnimationBaby.walkBackwardAnimation(using: self.setBabyTexture)
+            ? WalkingAnimationBaby.walkForwardAnimation(
+                using: self.setBabyTexture)
+            : WalkingAnimationBaby.walkBackwardAnimation(
+                using: self.setBabyTexture)
 
         let move = SKAction.move(to: target, duration: duration)
         let walk = SKAction.group([move, animation])
@@ -741,7 +768,7 @@ class Level1Stage2Scene: SKScene {
         bayi.run(move) {
             self.bayi.removeAction(forKey: "walk")
             self.setBabyTexture(SKTexture(imageNamed: "baby_idle_sit"))
-        
+
             self.playWithBunnyDollAnimation()
         }
     }
@@ -808,15 +835,20 @@ class Level1Stage2Scene: SKScene {
         }
 
         let targetPosition = CGPoint(x: targetX, y: 90)
-        let distance = hypot(bayi.position.x - targetPosition.x, bayi.position.y - targetPosition.y)
+        let distance = hypot(
+            bayi.position.x - targetPosition.x,
+            bayi.position.y - targetPosition.y)
 
         if distance > 10 {
             let duration = TimeInterval(distance / 130.0)
 
             let move = SKAction.move(to: targetPosition, duration: duration)
-            let walkAnimation = targetX > bayi.position.x
-                ? WalkingAnimationBaby.walkForwardAnimation(using: self.setBabyTexture)
-                : WalkingAnimationBaby.walkBackwardAnimation(using: self.setBabyTexture)
+            let walkAnimation =
+                targetX > bayi.position.x
+                ? WalkingAnimationBaby.walkForwardAnimation(
+                    using: self.setBabyTexture)
+                : WalkingAnimationBaby.walkBackwardAnimation(
+                    using: self.setBabyTexture)
 
             bayi.run(SKAction.group([move, walkAnimation]), withKey: "walk")
             bayi.run(move) {
@@ -882,15 +914,19 @@ class Level1Stage2Scene: SKScene {
 
         let moveInterval: TimeInterval = 0.05
 
-        movementTimer = Timer.scheduledTimer(withTimeInterval: moveInterval, repeats: true) { [weak self] _ in
+        movementTimer = Timer.scheduledTimer(
+            withTimeInterval: moveInterval, repeats: true
+        ) { [weak self] _ in
             guard let self = self else { return }
 
-            let distance: CGFloat = self.currentMovementDirection == .right ? 5.0 : -5.0
+            let distance: CGFloat =
+                self.currentMovementDirection == .right ? 5.0 : -5.0
 
             // Batas kanan/kiri layar
             let boxPosX = self.box.position.x + distance
             if self.currentMovementDirection == .right {
-                let batasKanan = self.size.width - (self.box.size.width / 2) - 20
+                let batasKanan =
+                    self.size.width - (self.box.size.width / 2) - 20
                 if boxPosX > batasKanan { return }
             } else {
                 let batasKiri = self.box.size.width / 2 + 420
@@ -898,7 +934,8 @@ class Level1Stage2Scene: SKScene {
             }
 
             // Gerakkan box
-            let moveAction = SKAction.moveBy(x: distance, y: 0, duration: moveInterval)
+            let moveAction = SKAction.moveBy(
+                x: distance, y: 0, duration: moveInterval)
             self.box.run(moveAction)
 
             self.updateBabyPosition()
@@ -914,9 +951,11 @@ class Level1Stage2Scene: SKScene {
 
                 let walkAnim: SKAction
                 if self.currentMovementDirection == .right {
-                    walkAnim = WalkingAnimationBaby.walkLowRight(using: self.setBabyTexture)
+                    walkAnim = WalkingAnimationBaby.walkLowRight(
+                        using: self.setBabyTexture)
                 } else {
-                    walkAnim = WalkingAnimationBaby.walkLowRightBackward(using: self.setBabyTexture)
+                    walkAnim = WalkingAnimationBaby.walkLowRightBackward(
+                        using: self.setBabyTexture)
                 }
 
                 let repeatAnim = SKAction.repeatForever(walkAnim)
@@ -979,7 +1018,7 @@ class Level1Stage2Scene: SKScene {
 
     private func transitionToNextScene() {
         isTeksDadIsComingActive = false
-        
+
         let blackOverlay = SKSpriteNode(color: .black, size: size)
         blackOverlay.position = CGPoint(x: size.width / 2, y: size.height / 2)
         blackOverlay.zPosition = 110
@@ -1001,7 +1040,6 @@ class Level1Stage2Scene: SKScene {
             transitionLabel.alpha = 0
             self.addChild(transitionLabel)
 
-        
             let fadeInText = SKAction.fadeIn(withDuration: 1.0)
             transitionLabel.run(fadeInText)
 
@@ -1014,13 +1052,14 @@ class Level1Stage2Scene: SKScene {
             }
         }
     }
-    
+
     internal func setBabyTexture(_ texture: SKTexture) {
         bayi.texture = texture
         let scale = babyTargetWidth / texture.size().width
-        bayi.size = CGSize(width: babyTargetWidth, height: texture.size().height * scale)
+        bayi.size = CGSize(
+            width: babyTargetWidth, height: texture.size().height * scale)
     }
-    
+
     private func stopAllCurrentActions() {
         bayi.removeAllActions()
         setBabyTexture(SKTexture(imageNamed: "baby_idle_stand"))

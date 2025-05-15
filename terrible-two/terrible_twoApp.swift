@@ -9,9 +9,9 @@ import SwiftUI
 
 @main
 struct terrible_twoApp: App {
-    
+
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
-    
+
     var body: some Scene {
         WindowGroup {
             GameStartView()
@@ -20,7 +20,10 @@ struct terrible_twoApp: App {
 }
 
 class AppDelegate: NSObject, UIApplicationDelegate {
-    func application(_ application: UIApplication, supportedInterfaceOrientationsFor window: UIWindow?) -> UIInterfaceOrientationMask {
+    func application(
+        _ application: UIApplication,
+        supportedInterfaceOrientationsFor window: UIWindow?
+    ) -> UIInterfaceOrientationMask {
         return .landscape
     }
 }

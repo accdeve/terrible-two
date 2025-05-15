@@ -72,14 +72,6 @@ class Level1Stage1Scene: SKScene {
         let scale = max(widthScale, heightScale)
         background.setScale(scale)
         addChild(background)
-
-        // Add immersive "breathing" animation to simulate baby's view
-//        let scaleUp = SKAction.scale(by: 1.03, duration: 2.2)
-//        scaleUp.timingMode = .easeInEaseOut
-//        let scaleDown = SKAction.scale(to: scale, duration: 2.2)
-//        scaleDown.timingMode = .easeInEaseOut
-//        let breathe = SKAction.sequence([scaleUp, scaleDown])
-//        background.run(SKAction.repeatForever(breathe))
     }
     
     private func setupBabyBox() {
